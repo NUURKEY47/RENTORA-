@@ -68,8 +68,8 @@ const router = express.Router();
 router.post("/", verifyToken, authorizeRoles("LANDLORD", "ADMIN"), validate(createPropertySchema), createProperty);
 router.put("/:id/assign-landlord", verifyToken, authorizeRoles("ADMIN"), validate(assignLandlordSchema), assignLandlord);
 router.put("/:id", verifyToken, authorizeRoles("LANDLORD", "ADMIN"), validate(updatePropertySchema), updatePropertyById);
-router.get("/", verifyToken, authorizeRoles("LANDLORD", "ADMIN"), getProperty);
-router.get("/:id", verifyToken, authorizeRoles("LANDLORD", "ADMIN"), getPropertyById);
+router.get("/", verifyToken, authorizeRoles("LANDLORD", "ADMIN", "TENANT"), getProperty);
+router.get("/:id", verifyToken, authorizeRoles("LANDLORD", "ADMIN", "TENANT"), getPropertyById);
 router.delete("/:id", verifyToken, authorizeRoles("LANDLORD", "ADMIN"), deletePropertyById);
 
 export default router;

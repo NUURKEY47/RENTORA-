@@ -10,7 +10,10 @@ export const propertyRepository = {
   },
 
   createProperty: async (data) => {
-    return await prisma.property.create({ data });
+    return await prisma.property.create({ 
+      data,
+      include: { landlord: { select: { id: true, name: true } } }
+    });
   },
 
   findPropertyById: async (id) => {
@@ -21,14 +24,7 @@ export const propertyRepository = {
     return await prisma.property.update({
       where: { id },
       data,
-      select: {
-        id: true,
-        name: true,
-        location: true,
-        categoryId: true,
-        description: true,
-        landlordId: true,
-      },
+      include: { landlord: { select: { id: true, name: true } } }
     });
   },
 
@@ -36,19 +32,18 @@ export const propertyRepository = {
     return await prisma.property.update({
       where: { id: propertyId },
       data: { landlordId },
-      select: {
-        id: true,
-        name: true,
-        location: true,
-        categoryId: true,
-        description: true,
-        landlordId: true,
-      },
+      include: { landlord: { select: { id: true, name: true } } }
     });
   },
 
   findManyProperties: async (where) => {
-    return await prisma.property.findMany({ where });
+    return await prisma.property.findMany({ 
+      where,
+      include: { 
+        landlord: { select: { id: true, name: true } },
+        category: true
+      }
+    });
   },
 
   countUnitsByPropertyId: async (propertyId) => {

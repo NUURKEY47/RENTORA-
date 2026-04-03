@@ -103,7 +103,12 @@ export const tenantService = {
         if (user.role === "LANDLORD") {
             where.unit = { property: { landlordId: user.id } };
         } else if (user.role === "ADMIN" && user.managedById) {
-            where.managedById = user.id; // sub-admin sees managed tenants
+            where.OR = [
+                { managedById: user.id },
+                { unit: { property: { landlord: { managedById: user.id } } } }
+            ];
+        } else if (user.role === "TENANT") {
+            where.id = user.id;
         }
         return await tenantRepository.findManyTenants(where);
     },
@@ -132,5 +137,60 @@ export const tenantService = {
         const invoicesCount = data.invoices.length;
         const bookingsCount = data.bookings.length;
         return { unit: data.unit, invoices: data.invoices, payments: data.payments, bookings: data.bookings, invoicesCount, bookingsCount };
+    },
+
+    updateTenant: async (id, data, user) => {
+        const existing = await tenantRepository.findUserById(id);
+        if (!existing || existing.role !== "TENANT") {
+            throw new AppError("Tenant not found", 404);
+        }
+
+        // RBAC check
+        if (user.role === "LANDLORD" && (!existing.unit || existing.unit.property.landlordId !== user.id)) {
+            throw new AppError("You do not own this tenant's unit", 403);
+        } else if (user.role === "ADMIN" && user.managedById && existing.managedById !== user.id) {
+            throw new AppError("You do not manage this tenant", 403);
+        }
+
+        if (data.password) {
+            data.password = await bcrypt.hash(data.password, 10);
+        }
+
+        // If unit is being changed
+        if (data.unitId && data.unitId !== existing.unitId) {
+            const unit = await tenantRepository.findUnitById(data.unitId);
+            if (!unit || unit.status !== "available") {
+                throw new AppError("New unit is not available", 400);
+            }
+            // Free old unit
+            if (existing.unitId) {
+                await tenantRepository.updateUnitStatus(existing.unitId, "available");
+            }
+            // Occupy new unit
+            await tenantRepository.updateUnitStatus(data.unitId, "occupied");
+        }
+
+        return await tenantRepository.updateUser(id, data);
+    },
+
+    deleteTenant: async (id, user) => {
+        const existing = await tenantRepository.findUserById(id);
+        if (!existing || existing.role !== "TENANT") {
+            throw new AppError("Tenant not found", 404);
+        }
+
+        // RBAC check
+        if (user.role === "LANDLORD" && (!existing.unit || existing.unit.property.landlordId !== user.id)) {
+            throw new AppError("You do not own this tenant's unit", 403);
+        } else if (user.role === "ADMIN" && user.managedById && existing.managedById !== user.id) {
+            throw new AppError("You do not manage this tenant", 403);
+        }
+
+        // Free up unit if assigned
+        if (existing.unitId) {
+            await tenantRepository.updateUnitStatus(existing.unitId, "available");
+        }
+
+        await tenantRepository.deleteUser(id);
     },
 };

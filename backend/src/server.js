@@ -1,14 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
+import app from "./app.js";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 
 const swaggerDoc = YAML.load("./docs/swagger.yml");
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
-
-
-import app from "./app.js";
 
 const PORT = process.env.PORT || 3000;
 

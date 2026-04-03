@@ -47,6 +47,32 @@ export const getTenantById = async (req, res, next) => {
     }
 };
 
+export const updateTenant = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) {
+            return next(new AppError("Invalid tenant ID", 400));
+        }
+        const tenant = await tenantService.updateTenant(id, req.body, req.user);
+        sendResponse(res, { message: "Tenant updated successfully", data: tenant });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const deleteTenant = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) {
+            return next(new AppError("Invalid tenant ID", 400));
+        }
+        await tenantService.deleteTenant(id, req.user);
+        sendResponse(res, { message: "Tenant deleted successfully" });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export const getTenantDashboard = async (req, res, next) => {
     try {
         const dashboard = await tenantService.getTenantDashboard(req.user);

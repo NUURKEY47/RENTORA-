@@ -3,28 +3,8 @@ import AppError from "../../utils/AppError.js";
 import bcrypt from "bcrypt";
 
 export const userService = {
-
-  createLandlord: async (data, currentUser) => {
-    // Validate role is LANDLORD
-    if (data.role && data.role !== "LANDLORD") {
-      throw new AppError("Role must be LANDLORD", 400);
-    }
-
-    // Auto-set role and managedById (creator = current admin/sub-admin)
-    data.role = "LANDLORD";
-    data.managedById = currentUser.id; // ← this auto-assigns to the creator (sub-admin or super-admin)
-
-    // Hash password
-    if (data.password) {
-      data.password = await bcrypt.hash(data.password, 10);
-    }
-
-    return await userRepository.createUser(data);
-  },
-
-
-
-  getAllUsers: async (query, user) => {
+ 
+   getAllUsers: async (query, user) => {
     const where = {};
 
     if (query.role) {

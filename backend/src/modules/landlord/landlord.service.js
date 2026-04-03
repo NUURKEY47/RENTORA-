@@ -3,6 +3,21 @@ import AppError from "../../utils/AppError.js";
 import bcrypt from "bcrypt";
 
 export const landlordService = {
+  createLandlord: async (data, currentUser) => {
+    // 1. Force the role to LANDLORD
+    data.role = "LANDLORD";
+
+    // 2. Link to the Admin who is creating them
+    data.managedById = currentUser.id;
+
+    // 3. Hash the password
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+
+    return await landlordRepository.createLandlord(data);
+  },
+
   listLandlords: async (user) => {
     const base = { role: "LANDLORD" };
 
@@ -10,7 +25,10 @@ export const landlordService = {
       return landlordRepository.findManyLandlords({ ...base, id: user.id });
 
     if (user.role === "ADMIN" && user.managedById)
-      return landlordRepository.findManyLandlords({ ...base, managedById: user.id });
+      return landlordRepository.findManyLandlords({
+        ...base,
+        managedById: user.id,
+      });
 
     return landlordRepository.findManyLandlords(base); // super-admin
   },

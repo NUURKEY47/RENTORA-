@@ -20,6 +20,7 @@ model User {
   contract     String?
   occupation   String?
   regDate      DateTime?  @default(now())
+  lastLogin    DateTime?
   role         UserRole
   status       String     @default("active")
   bookings     Booking[]  @relation("UserBookings")

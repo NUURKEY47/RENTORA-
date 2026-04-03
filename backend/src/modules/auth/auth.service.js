@@ -15,7 +15,12 @@ export const authService = {
     data.password = await bcrypt.hash(data.password, 10);
     const user = await authRepository.createUser(data);
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role, managedById: user.managedById },
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        managedById: user.managedById || null,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "7d" },
     );
@@ -33,12 +38,18 @@ export const authService = {
     }
     const token = jwt.sign(
       {
-        id: user.id, email: user.email, role: user.role,
-        managedById: user.managedById   // ← ADD THIS LINE (or it stays undefined)
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        managedById: user.managedById || null,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" },
     );
+
+    // Record login time
+    await authRepository.updateLastLogin(user.id);
+
     return { user, token };
   },
 
@@ -48,26 +59,39 @@ export const authService = {
       throw new AppError("Invalid or missing role", 401);
     }
 
-    if (role === "TENANT" || role === "LANDLORD") {
-      return null; // No need for token
+    // Role-specific token verification
+    if (role === "ADMIN") {
+      const adminCount = await authRepository.countAdmins();
+      if (adminCount === 0) {
+        return null; // First admin, no token needed
+      }
+
+      if (!token) {
+        throw new AppError("Token required to create new admin", 401);
+      }
+
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        if (decoded.role !== "ADMIN") {
+          throw new AppError("Only admins can create new admins", 401);
+        }
+        return decoded;
+      } catch (error) {
+        throw new AppError("Invalid or expired token", 401);
+      }
     }
 
-    const adminCount = await authRepository.countAdmins();
-
-    if (adminCount === 0) {
-      return null; // First admin, no token
+    // For LANDLORD or TENANT: Registration is public, but we capture the token
+    // if an Admin is logged in and creating the user.
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        return decoded;
+      } catch (error) {
+        return null; // Invalid token? Treat as guest/public registration
+      }
     }
 
-    if (!token) {
-      throw new AppError("Token required to create new admin", 401);
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (decoded.role !== "ADMIN") {
-      throw new AppError("Only admins can create new admins", 401);
-    }
-
-    return decoded;
+    return null; // Guest registration
   },
 };

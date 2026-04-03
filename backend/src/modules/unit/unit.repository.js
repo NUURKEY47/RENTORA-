@@ -2,11 +2,17 @@ import prisma from "../../config/db.js";
 
 export const unitRepository = {
   findPropertyById: async (id) => {
-    return await prisma.property.findUnique({ where: { id } });
+    return await prisma.property.findUnique({
+      where: { id },
+      include: { landlord: true },
+    });
   },
 
   createUnit: async (data) => {
-    return await prisma.unit.create({ data });
+    return await prisma.unit.create({ 
+      data,
+      include: { property: true }
+    });
   },
 
   findUnitById: async (id, includeProperty = false) => {
@@ -35,7 +41,10 @@ export const unitRepository = {
   findManyUnits: async (where, includeProperty = false) => {
     return await prisma.unit.findMany({
       where,
-      include: { property: includeProperty },
+      include: { 
+        property: includeProperty ? { include: { landlord: true } } : false,
+        tenants: { select: { id: true, name: true } }
+      },
     });
   },
 
@@ -47,6 +56,12 @@ findLandlordProperties: async (landlordId) => {
   return await prisma.property.findMany({
     where: { landlordId },
     select: { id: true },
+  });
+},
+
+findLandlordById: async (id) => {
+  return await prisma.user.findUnique({
+    where: { id, role: "LANDLORD" }
   });
 },
 

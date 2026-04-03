@@ -5,6 +5,10 @@ export const landlordRepository = {
     return await prisma.user.findUnique({ where: { id } });
   },
 
+  createLandlord: async (data) => {
+    return await prisma.user.create({ data });
+  },
+
   findManyLandlords: async (where) => {
     console.log("Executing query with where:", where);
     return await prisma.user.findMany({
@@ -14,6 +18,12 @@ export const landlordRepository = {
         name: true,
         email: true,
         role: true,
+        manager: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
   },

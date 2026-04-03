@@ -1,9 +1,8 @@
 import express from "express";
 import { verifyToken, authorizeRoles } from "../../middlewares/auth.js";
 import { validate } from "../../middlewares/validateMiddleware.js";
-import { updateSchema , createLandlordSchema} from "../../validation/userSchemas.js";
+import { updateSchema } from "../../validation/userSchemas.js";
 import {
-  createLandlord,
   getAllUsers,
   getUserById,
   updateUserById,
@@ -12,13 +11,6 @@ import {
 
 const router = express.Router();
 
-router.post(
-  "/landlords",
-  verifyToken,
-  authorizeRoles("ADMIN"), // only admins/sub-admins can create landlords
-  validate(createLandlordSchema), // reuse or create new schema for name/email/password
-  createLandlord,
-);
 router.get("/", verifyToken, authorizeRoles("ADMIN"), getAllUsers);
 router.get("/:id", verifyToken, authorizeRoles("ADMIN"), getUserById);
 router.put(

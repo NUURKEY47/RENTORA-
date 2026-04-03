@@ -37,13 +37,11 @@ export const tenantRepository = {
     findManyTenants: async (where) => {
         return await prisma.user.findMany({
             where,
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                role: true,
-                unitId: true,
-            },
+            include: {
+                unit: {
+                    include: { property: true }
+                }
+            }
         });
     },
 
@@ -56,6 +54,19 @@ export const tenantRepository = {
                 payments: true,
                 bookings: true,
             },
+        });
+    },
+
+    updateUser: async (id, data) => {
+        return await prisma.user.update({
+            where: { id },
+            data,
+        });
+    },
+
+    deleteUser: async (id) => {
+        return await prisma.user.delete({
+            where: { id },
         });
     },
 };

@@ -1,8 +1,9 @@
 import express from "express";
 import { verifyToken, authorizeRoles } from "../../middlewares/auth.js";
 import { validate } from "../../middlewares/validateMiddleware.js";
-import { updateLandlordSchema } from "../../validation/landlordSchemas.js";
+import { updateLandlordSchema, createLandlordSchema } from "../../validation/landlordSchemas.js";
 import {
+  createLandlord,
   updateLandlord,
   deleteLandlord,
   listLandlords,
@@ -12,9 +13,11 @@ import {
 
 const router = express.Router();
 
+router.post("/", verifyToken, authorizeRoles("ADMIN"), validate(createLandlordSchema), createLandlord);
+
 router.get("/", verifyToken, authorizeRoles("LANDLORD", "ADMIN"), listLandlords);
-router.get("/:id", verifyToken, authorizeRoles("LANDLORD", "ADMIN"), getLandlordById);
 router.get("/dashboard", verifyToken, authorizeRoles("LANDLORD"), getLandlordDashboard);
+router.get("/:id", verifyToken, authorizeRoles("LANDLORD", "ADMIN"), getLandlordById);
 
 // Update & Delete — admin-only (sub-admins restricted via service)
 router.put("/:id", verifyToken, authorizeRoles("ADMIN"), validate(updateLandlordSchema), updateLandlord);

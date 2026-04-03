@@ -35,13 +35,13 @@ router.put(
 router.get(
   "/:id",
   verifyToken,
-  authorizeRoles("LANDLORD", "ADMIN"),
+  authorizeRoles("LANDLORD", "ADMIN", "TENANT"),
   catchAsync(getUnitById) // New handler
 );
 router.get(
   "/",
   verifyToken,
-  authorizeRoles("LANDLORD", "ADMIN"),
+  authorizeRoles("LANDLORD", "ADMIN", "TENANT"),
   catchAsync(listUnits)
 );
 router.delete(

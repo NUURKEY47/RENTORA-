@@ -6,6 +6,7 @@ import propertyRoute from "./modules/property/property.routes.js"
 import unitRoute from "./modules/unit/unit.routes.js"
 import landlordUnit from "./modules/landlord/landlord.routes.js"
 import tenantRoute from "./modules/tenant/tenant.routes.js"
+import adminRoute from "./modules/admin/admin.routes.js";
 import globalErrorHandler from "./middlewares/errorHandler.js";
 
 
@@ -19,10 +20,11 @@ app.use(express.json());
 
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/users", userRoute)
-app.use("/api/v1/property", propertyRoute)
+app.use("/api/v1/properties", propertyRoute)
 app.use("/api/v1/units", unitRoute)
 app.use("/api/v1/landlords", landlordUnit)
 app.use("/api/v1/tenants", tenantRoute)
+app.use("/api/v1/admin", adminRoute)
 
 
 

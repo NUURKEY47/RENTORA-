@@ -14,6 +14,7 @@ export const updatePropertySchema = z.object({
   name: z.string().min(1, "Name must be at least 1 character").optional(),
   location: z.string().min(1, "Location must be at least 1 character").optional(),
   categoryId: z.number().int().positive("Category ID must be a positive integer").optional(),
+  landlordId: z.number().int().positive().optional(),
   description: z.string().optional(),
 });
 

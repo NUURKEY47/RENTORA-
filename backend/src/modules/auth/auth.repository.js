@@ -21,4 +21,11 @@ export const authRepository = {
   countAdmins: async () => {
     return await prisma.user.count({ where: { role: "ADMIN" } });
   },
+
+  updateLastLogin: async (userId) => {
+    return await prisma.user.update({
+      where: { id: userId },
+      data: { lastLogin: new Date() },
+    });
+  },
 };

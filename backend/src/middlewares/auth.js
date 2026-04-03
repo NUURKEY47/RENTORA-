@@ -31,7 +31,7 @@ export const verifyToken = async (req, res, next) => {
 export const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user || !allowedRoles.includes(req.user.role)) {
-      throw new AppError("insufficient Permission", 401);
+      throw new AppError("insufficient Permission", 403);
     }
     next();
   };

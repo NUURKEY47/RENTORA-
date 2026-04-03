@@ -8,14 +8,18 @@ import {
     listTenants,
     getTenantById,
     getTenantDashboard,
+    updateTenant,
+    deleteTenant,
 } from "./tenant.controller.js";
 
 const router = express.Router();
 
 router.post("/", verifyToken, authorizeRoles("ADMIN", "LANDLORD"), validate(createTenantSchema), createTenant);
 router.put("/:id/assign-unit", verifyToken, authorizeRoles("ADMIN", "LANDLORD"), validate(assignToUnitSchema), assignToUnit);
-router.get("/", verifyToken, authorizeRoles("ADMIN", "LANDLORD"), listTenants);
-router.get("/:id", verifyToken, authorizeRoles("ADMIN", "LANDLORD"), getTenantById);
+router.get("/", verifyToken, authorizeRoles("ADMIN", "LANDLORD", "TENANT"), listTenants);
 router.get("/dashboard", verifyToken, authorizeRoles("TENANT"), getTenantDashboard);
+router.get("/:id", verifyToken, authorizeRoles("ADMIN", "LANDLORD", "TENANT"), getTenantById);
+router.put("/:id", verifyToken, authorizeRoles("ADMIN", "LANDLORD"), updateTenant);
+router.delete("/:id", verifyToken, authorizeRoles("ADMIN", "LANDLORD"), deleteTenant);
 
 export default router;

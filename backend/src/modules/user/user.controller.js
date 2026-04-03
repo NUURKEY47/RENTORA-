@@ -5,20 +5,6 @@ import AppError from "../../utils/AppError.js";
 
 
 
-export const createLandlord = async (req, res, next) => {
-  try {
-    const landlord = await userService.createLandlord(req.body, req.user);
-    sendResponse(res, {
-      statusCode: 201,
-      message: "Landlord created successfully",
-      data: landlord,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-
 export const getAllUsers = async (req, res, next) => {
   try {
     const users = await userService.getAllUsers(req.query, req.user);

@@ -2,6 +2,19 @@ import { landlordService } from "./landlord.service.js";
 import sendResponse from "../../utils/sendResponse.js";
 import AppError from "../../utils/AppError.js";
 
+export const createLandlord = async (req, res, next) => {
+  try {
+    const landlord = await landlordService.createLandlord(req.body, req.user);
+    sendResponse(res, {
+      statusCode: 201,
+      message: "Landlord created successfully",
+      data: landlord,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const listLandlords = async (req, res, next) => {
   try {
     console.log("=================================");
