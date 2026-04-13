@@ -8,9 +8,9 @@ export function PublicFooter() {
           <div>
             <div className="flex items-center space-x-3 mb-2">
                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg pointer-events-none">R</div>
-               <span className="text-xl font-bold text-gray-900 tracking-tight">RealApi</span>
+               <span className="text-xl font-bold text-gray-900 tracking-tight">Rentora</span>
             </div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center md:text-left">© 2024 RealApi. Architecting the future of real estate data.</p>
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center md:text-left">© 2024 Rentora. Architecting the future of real estate data.</p>
           </div>
 
           <div className="flex flex-wrap justify-center gap-6 md:gap-10 text-[10px] font-bold text-gray-400 uppercase tracking-widest">

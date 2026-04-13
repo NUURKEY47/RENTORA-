@@ -1,54 +1,90 @@
+import { 
+  RiShieldStarLine, 
+  RiHeadphoneLine, 
+  RiComputerLine,
+  RiDatabaseLine,
+  RiRocketLine,
+  RiCheckDoubleLine
+} from "react-icons/ri";
+
 export default function HeroSection() {
   return (
-    <section className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 overflow-hidden bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-         <div className="inline-flex items-center px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold uppercase tracking-widest mb-10 border border-blue-100 shadow-sm shadow-blue-50">
-            <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2 animate-pulse"></span>
-            Next-Gen Data Infrastructure
-         </div>
-         
-         <h1 className="text-5xl lg:text-8xl font-bold text-gray-900 leading-[1.1] mb-8 tracking-tight max-w-5xl mx-auto">
-            Your Real Estate Operations, <br />
-            <span className="text-blue-600 italic">Automated.</span>
-         </h1>
-         
-         <p className="text-xl text-gray-500 mb-12 leading-relaxed font-medium max-w-3xl mx-auto">
-            Scale your property portfolio with high-performance APIs powered by Node.js, Prisma, and Express. Experience the speed of institutional-grade real estate automation.
-         </p>
-         
-         <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-24 max-w-xl mx-auto">
-            <div className="w-full relative">
-               <input 
-                  type="email" 
-                  placeholder="Enter your business email" 
-                  className="w-full px-8 py-4 bg-gray-50 border border-gray-100 rounded-2xl font-medium text-sm focus:ring-2 focus:ring-blue-100 outline-none transition"
-               />
+    <section id="platform" className="pt-32 pb-16 lg:pt-40 lg:pb-20 bg-[#f8faf9] relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center mb-16">
+          
+          {/* Left Column: Content */}
+          <div className="flex flex-col items-start text-left max-w-xl">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-100/50 text-[#0a6630] rounded-full text-[13px] font-semibold mb-6 border border-emerald-200">
+               <RiCheckDoubleLine className="h-4 w-4" />
+               <span>Engineered for Maximum Yield</span>
             </div>
-            <button className="w-full sm:w-auto px-10 py-4 bg-blue-600 text-white rounded-2xl font-bold text-sm uppercase tracking-wider shadow-2xl shadow-blue-300 hover:bg-blue-700 transition transform hover:-translate-y-1">
-               Access the Engine
-            </button>
-         </div>
+            
+            <h1 className="text-5xl lg:text-[64px] font-bold text-slate-900 leading-[1.1] tracking-tight mb-4">
+               The Global Real Estate Operating System
+            </h1>
 
-         {/* Tech Stack Ribbon */}
-         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            <TechCard name="Node.js" role="RUNTIME" image="https://cdn.iconscout.com/icon/free/png-256/node-js-1174925.png" />
-            <TechCard name="Prisma" role="ORM ENGINE" image="https://raw.githubusercontent.com/prisma/prisma/main/packages/sdk/src/images/prisma-logo.png" />
-            <TechCard name="Express" role="FRAMEWORK" image="https://www.vectorlogo.zone/logos/expressjs/expressjs-icon.svg" />
-            <TechCard name="PostgreSQL" role="DATABASE" image="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" />
-         </div>
+            <h2 className="text-xl lg:text-2xl font-medium text-[#0a6630] mb-6">
+               Intelligent Software for Elite Landlords & Managers
+            </h2>
+            
+            <p className="text-[17px] text-slate-600 leading-relaxed mb-10">
+               Eradicate manual data entry, streamline unit turnovers, and securely funnel all collection payments into a singular dynamic hub.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto mb-10">
+               <button className="w-full sm:w-auto px-8 py-3.5 bg-[#0e803c] text-white rounded-full font-medium text-[15px] hover:bg-[#085a27] transition shadow-lg shadow-emerald-500/20">
+                  Setup Account
+               </button>
+               <button className="w-full sm:w-auto px-8 py-3.5 bg-white text-slate-700 rounded-full font-medium text-[15px] hover:text-[#0e803c] transition shadow-sm border border-slate-200">
+                  View Tour
+               </button>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-6 text-[13px] font-medium text-slate-600">
+               <div className="flex items-center space-x-1.5">
+                  <RiShieldStarLine className="h-4 w-4 text-[#0e803c]" />
+                  <span>Military-grade data protection</span>
+               </div>
+               <div className="flex items-center space-x-1.5">
+                  <RiHeadphoneLine className="h-4 w-4 text-[#0e803c]" />
+                  <span>Dedicated concierge</span>
+               </div>
+               <div className="flex items-center space-x-1.5">
+                  <RiComputerLine className="h-4 w-4 text-[#0e803c]" />
+                  <span>Cross-device compatibility</span>
+               </div>
+            </div>
+          </div>
+
+          {/* Right Column: Visual Graphic */}
+          <div className="relative mt-8 lg:mt-0">
+             <div className="relative rounded-[24px] overflow-hidden shadow-xl shadow-slate-200 border-[8px] border-white/80 backdrop-blur-md transform transition duration-700 hover:-translate-y-2 bg-white">
+                <img 
+                   src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80" 
+                   className="w-full h-auto object-cover" 
+                   alt="Rentora Dashboard Mockup"
+                />
+             </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar items */}
+        <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8 text-[13px] font-medium text-slate-500 pt-8 border-t border-slate-200/60">
+           <span>Trusted by top-tier real estate operators</span>
+           <div className="hidden md:block w-1 h-1 rounded-full bg-slate-300"></div>
+           <div className="flex items-center space-x-1.5">
+              <RiDatabaseLine className="h-4 w-4 text-[#0e803c]" />
+              <span>Immutable transaction logs</span>
+           </div>
+           <div className="hidden md:block w-1 h-1 rounded-full bg-slate-300"></div>
+           <div className="flex items-center space-x-1.5">
+              <RiRocketLine className="h-4 w-4 text-[#0e803c]" />
+              <span>Deploy in 5 minutes</span>
+           </div>
+        </div>
+
       </div>
     </section>
-  );
-}
-
-function TechCard({ name, role, image }) {
-  return (
-    <div className="bg-gray-50/50 p-6 rounded-3xl border border-gray-100 flex flex-col items-center justify-center group hover:bg-white hover:shadow-xl transition-all duration-300">
-       <div className="h-12 w-12 mb-4 flex items-center justify-center group-hover:scale-110 transition">
-          <img src={image} alt={name} className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0" />
-       </div>
-       <h4 className="text-sm font-bold text-gray-900 mb-1">{name}</h4>
-       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{role}</p>
-    </div>
   );
 }

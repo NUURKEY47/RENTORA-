@@ -20,22 +20,22 @@ model User {
   contract     String?
   occupation   String?
   regDate      DateTime?  @default(now())
-  lastLogin    DateTime?
-  role         UserRole
   status       String     @default("active")
+  role         UserRole
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  lastLogin    DateTime?
   bookings     Booking[]  @relation("UserBookings")
   invoices     Invoice[]  @relation("UserInvoices")
   payments     Payment[]  @relation("UserPayments")
-  properties   Property[] @relation("LandlordProperties")  // Set landlordId null if landlord deleted
-  manager      User?      @relation("ManagedBy", fields: [managedById], references: [id], onDelete: SetNull)
+  properties   Property[] @relation("LandlordProperties")
+  manager      User?      @relation("ManagedBy", fields: [managedById], references: [id])
   managedUsers User[]     @relation("ManagedBy")
   unit         Unit?      @relation("UnitTenants", fields: [unitId], references: [id])
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
 
-  @@index([email])  // Faster email lookups
-  @@index([role])   // Faster role filters
-  @@index([managedById])  // Faster managed queries
+  @@index([email])
+  @@index([role])
+  @@index([managedById])
   @@map("users")
 }
 
@@ -46,12 +46,12 @@ model Property {
   categoryId  Int
   landlordId  Int?
   description String?
-  regDate     DateTime?  @default(now())
+  regDate     DateTime? @default(now())
   category    Category  @relation(fields: [categoryId], references: [id])
-  landlord    User?     @relation("LandlordProperties", fields: [landlordId], references: [id], onDelete: SetNull)
+  landlord    User?     @relation("LandlordProperties", fields: [landlordId], references: [id])
   units       Unit[]
 
-  @@index([landlordId])  // Faster ownership queries
+  @@index([landlordId])
   @@index([categoryId])
   @@map("properties")
 }

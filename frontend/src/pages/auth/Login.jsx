@@ -50,7 +50,7 @@ export default function Login() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
         <div className="relative z-10 flex flex-col justify-end p-12 text-white">
           <blockquote className="text-2xl font-medium italic leading-relaxed max-w-xl">
-            "RealApi has transformed how we manage our properties. The seamless
+            "Rentora has transformed how we manage our properties. The seamless
             integration between landlords and tenants is unmatched."
           </blockquote>
           <div className="mt-6 flex items-center">
@@ -76,7 +76,7 @@ export default function Login() {
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-blue-700 font-bold text-xl">
                 M
               </div>
-              <span className="text-2xl font-bold text-white">RealApi</span>
+              <span className="text-2xl font-bold text-white">Rentora</span>
             </div>
           </div>
 
@@ -186,7 +186,7 @@ export default function Login() {
 
           {/* Bottom Footer */}
           <p className="mt-8 text-center text-sm text-gray-400">
-            © 2024 RealApi Inc. All rights reserved. | Privacy | Terms
+            © 2024 Rentora Inc. All rights reserved. | Privacy | Terms
           </p>
         </div>
       </div>

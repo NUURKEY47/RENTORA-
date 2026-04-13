@@ -74,7 +74,7 @@ export default function Register() {
           <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
             M
           </div>
-          <span className="text-2xl font-bold text-gray-900">RealApi</span>
+          <span className="text-2xl font-bold text-gray-900">Rentora</span>
         </div>
         <div className="flex items-center space-x-6">
           <span className="text-gray-600">Already a member?</span>
@@ -96,7 +96,7 @@ export default function Register() {
             <div className="px-8 pt-10 pb-6 bg-gradient-to-r from-blue-600 to-blue-500 text-white">
               <h1 className="text-3xl font-bold">Create your account</h1>
               <p className="mt-3 text-blue-100">
-                Manage your properties efficiently with RealApi.
+                Manage your properties efficiently with Rentora.
               </p>
             </div>
 
@@ -263,7 +263,7 @@ export default function Register() {
 
           {/* Footer */}
           <p className="mt-8 text-center text-sm text-gray-500">
-            © 2024 RealApi Inc. All rights reserved.
+            © 2024 Rentora Inc. All rights reserved.
           </p>
         </div>
       </div>

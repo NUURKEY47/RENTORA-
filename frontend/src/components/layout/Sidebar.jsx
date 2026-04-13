@@ -13,6 +13,8 @@ import {
   CalendarIcon,
   DocumentIcon,
   ChatBubbleLeftEllipsisIcon,
+  Square3Stack3DIcon,
+  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
 export default function Sidebar() {
@@ -23,27 +25,29 @@ export default function Sidebar() {
     ADMIN: [
       { name: "Dashboard", path: "/dashboard", icon: HomeIcon },
       { name: "Properties", path: "/properties", icon: BuildingOfficeIcon },
+      { name: "Units", path: "/units", icon: Square3Stack3DIcon },
       { name: "Landlords", path: "/landlords", icon: UsersIcon },
       { name: "Tenants", path: "/tenants", icon: UserGroupIcon },
     ],
     LANDLORD: [
       { name: "Dashboard", path: "/dashboard", icon: HomeIcon },
       { name: "My Properties", path: "/properties", icon: BuildingOfficeIcon },
-      { name: "Units", path: "/units", icon: BuildingOfficeIcon },
+      { name: "Units", path: "/units", icon: Square3Stack3DIcon },
       { name: "My Tenants", path: "/tenants", icon: UserGroupIcon },
     ],
     TENANT: [
       { name: "Dashboard", path: "/dashboard", icon: HomeIcon },
-      { name: "Payments", path: "/payments", icon: CreditCardIcon },
-      { name: "Bookings", path: "/bookings", icon: CalendarIcon },
-      { name: "Maintenance", path: "/maintenance", icon: WrenchScrewdriverIcon },
-      { name: "Documents", path: "/documents", icon: DocumentIcon },
+      { name: "Find Houses", path: "/units", icon: MagnifyingGlassIcon },
+      // { name: "Payments", path: "/payments", icon: CreditCardIcon },
+      // { name: "Bookings", path: "/bookings", icon: CalendarIcon },
+      // { name: "Maintenance", path: "/maintenance", icon: WrenchScrewdriverIcon },
+      // { name: "Documents", path: "/documents", icon: DocumentIcon },
     ],
   };
 
   const systemItems = role === "ADMIN" ? [
     { name: "User Management", path: "/user-management", icon: UserGroupIcon },
-    { name: "Settings", path: "/settings", icon: Cog6ToothIcon },
+    // { name: "Settings", path: "/settings", icon: Cog6ToothIcon },
   ] : [];
 
   const currentMenuItems = menuItems[role] || [];
@@ -69,11 +73,16 @@ export default function Sidebar() {
   return (
     <aside className="w-72 bg-white border-r border-gray-100 min-h-screen flex flex-col shrink-0 sticky top-0">
       <div className="p-8">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-xl shadow-blue-100">
-            R
+        <div className="flex items-center space-x-3 group px-2 mb-2">
+          <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
+            <svg viewBox="0 0 40 40" className="w-full h-full text-slate-900 fill-current">
+              <path d="M20 4L4 16H8V32H32V16H36L20 4Z" className="opacity-10 text-emerald-500" />
+              <path d="M20 4L4 16H36L20 4Z" />
+              <text x="50%" y="75%" textAnchor="middle" className="text-[18px] font-black fill-slate-900">R</text>
+            </svg>
+            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white flex items-center justify-center text-[8px] text-white">🔑</div>
           </div>
-          <span className="text-2xl font-black text-gray-900 tracking-tight">RealApi</span>
+          <span className="text-2xl font-black text-slate-900 tracking-tight group-hover:text-emerald-500 transition-colors">Rentora</span>
         </div>
       </div>
 
