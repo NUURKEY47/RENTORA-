@@ -1,0 +1,31 @@
+# {
+#     # Global options
+#     email your-email@example.com
+# }
+
+# 1. Frontend & Admin Domain
+rentora.cc {
+    # Serve static files from the build volume
+    root * /var/www/html
+    file_server
+
+    # Handle React routing: redirect unknown paths to index.html
+    try_files {path} /index.html
+
+    # Standard compression
+    encode gzip
+}
+
+# 2. Backend API Subdomain
+api.rentora.cc {
+    # Proxy all requests to the backend container
+    reverse_proxy api:3000
+
+    # Increase security and handle CORS headers if needed
+    header {
+        # Optional: Add any custom production headers here
+        Access-Control-Allow-Origin "https://rentora.cc"
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization"
+    }
+}

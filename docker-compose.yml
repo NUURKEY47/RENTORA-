@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # 1. Database
+  db:
+    image: postgres:16-alpine
+    container_name: rentora_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: rentorapass
+      POSTGRES_DB: rentora_prod
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rentora_network
+
+  # 2. Backend API
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rentora_api
+    restart: always
+    env_file:
+      - ./backend/.env.docker
+    depends_on:
+      - db
+    networks:
+      - rentora_network
+
+  # 3. Frontend Build (Utility container to produce the dist folder)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=https://api.rentora.cc/api/v1
+    container_name: rentora_frontend
+    volumes:
+      - frontend_dist:/app/dist
+    networks:
+      - rentora_network
+
+  # 4. Reverse Proxy & SSL (Caddy)
+  caddy:
+    image: caddy:2-alpine
+    container_name: rentora_proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - frontend_dist:/var/www/html
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+      - frontend
+    networks:
+      - rentora_network
+
+networks:
+  rentora_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  frontend_dist:
+  caddy_data:
+  caddy_config:
