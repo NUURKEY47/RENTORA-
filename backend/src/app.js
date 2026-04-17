@@ -15,7 +15,10 @@ import globalErrorHandler from "./middlewares/errorHandler.js";
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: 'https://rentora.cc',
+  credentials: true
+}));
 app.use(express.json());
 
 app.use("/api/v1/auth", authRoutes)
