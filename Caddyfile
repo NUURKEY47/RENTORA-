@@ -20,12 +20,4 @@ rentora.cc {
 api.rentora.cc {
     # Proxy all requests to the backend container
     reverse_proxy api:3000
-
-    # Increase security and handle CORS headers if needed
-    header {
-        # Optional: Add any custom production headers here
-        Access-Control-Allow-Origin "https://rentora.cc"
-        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-        Access-Control-Allow-Headers "Content-Type, Authorization"
-    }
 }
