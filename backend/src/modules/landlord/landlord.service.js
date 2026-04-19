@@ -114,6 +114,25 @@ export const landlordService = {
     const data = await landlordRepository.findLandlordDashboardData(user.id);
     const propertiesCount = data.length;
     const unitsCount = data.reduce((sum, p) => sum + p.units.length, 0);
-    return { properties: data, propertiesCount, unitsCount };
+
+    // Calculate unique tenants and occupied units
+    const tenantIds = new Set();
+    let occupiedUnitsCount = 0;
+    data.forEach((p) => {
+      p.units.forEach((u) => {
+        if (u.tenantId) {
+          tenantIds.add(u.tenantId);
+          occupiedUnitsCount++;
+        }
+      });
+    });
+
+    return {
+      properties: data,
+      propertiesCount,
+      unitsCount,
+      tenantsCount: tenantIds.size,
+      occupiedUnitsCount,
+    };
   },
 };

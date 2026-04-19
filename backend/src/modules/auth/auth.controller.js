@@ -22,7 +22,7 @@ export const login = async (req, res, next) => {
     );
     sendResponse(res, {
       message: "User logged in successfully",
-      data: { id: user.id, email: user.email, role: user.role, token },
+      data: { id: user.id, name: user.name, email: user.email, role: user.role, token },
     });
   } catch (error) {
     next(error);

@@ -26,8 +26,8 @@ export default function Login() {
 
     try {
       const response = await login(email, password);
-      const { token, role } = response.data;
-      authLogin(token, role);
+      const { token, role, name } = response.data;
+      authLogin(token, role, name);
       toast.success("Logged in successfully");
       navigate("/dashboard");
     } catch (err) {
