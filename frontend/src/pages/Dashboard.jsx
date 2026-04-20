@@ -279,8 +279,8 @@ export default function Dashboard() {
                   title={p.name}
                   location={p.location}
                   units={p.units?.length || 0}
-                  occupancy={p.units?.length > 0 ? Math.floor((p.units.filter(u => u.tenantId).length / p.units.length) * 100) : 0}
-                  status={p.units?.length > 0 && p.units.every(u => u.tenantId) ? "FULL" : "VACANCIES"}
+                  occupancy={p.units?.length > 0 ? Math.floor((p.units.filter(u => u.tenants?.length > 0).length / p.units.length) * 100) : 0}
+                  status={p.units?.length > 0 && p.units.every(u => u.tenants?.length > 0) ? "FULL" : "VACANCIES"}
                 />
               ))
             ) : (

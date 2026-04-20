@@ -120,8 +120,8 @@ export const landlordService = {
     let occupiedUnitsCount = 0;
     data.forEach((p) => {
       p.units.forEach((u) => {
-        if (u.tenantId) {
-          tenantIds.add(u.tenantId);
+        if (u.tenants && u.tenants.length > 0) {
+          u.tenants.forEach((t) => tenantIds.add(t.id));
           occupiedUnitsCount++;
         }
       });

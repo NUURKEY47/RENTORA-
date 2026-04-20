@@ -55,7 +55,11 @@ export const landlordRepository = {
     return await prisma.property.findMany({
       where: { landlordId },
       include: {
-        units: true,
+        units: {
+          include: {
+            tenants: true,
+          },
+        },
       },
     });
   },
