@@ -9,6 +9,14 @@ export const userRepository = {
         name: true,
         email: true,
         role: true,
+        status: true,
+        lastLogin: true,
+        unitId: true,
+        _count: {
+          select: {
+            properties: true,
+          },
+        },
       },
     });
   },

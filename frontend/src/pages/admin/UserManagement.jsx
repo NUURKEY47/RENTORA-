@@ -85,9 +85,9 @@ export default function UserManagement() {
 
       {/* User Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <SmallStatCard title="Total Users" value={stats.total} trend={12} isPositive={true} icon={UsersIcon} iconColor="text-blue-600 bg-blue-50" />
-        <SmallStatCard title="Active Landlords" value={stats.landlords} trend={5} isPositive={true} icon={KeyIcon} iconColor="text-orange-600 bg-orange-50" />
-        <SmallStatCard title="Active Tenants" value={stats.tenants} trend={8} isPositive={true} icon={UsersIcon} iconColor="text-green-600 bg-green-50" />
+        <SmallStatCard title="Total Users" value={stats.total} trend={0} isPositive={true} icon={UsersIcon} iconColor="text-blue-600 bg-blue-50" />
+        <SmallStatCard title="Active Landlords" value={stats.landlords} trend={0} isPositive={true} icon={KeyIcon} iconColor="text-orange-600 bg-orange-50" />
+        <SmallStatCard title="Active Tenants" value={stats.tenants} trend={0} isPositive={true} icon={UsersIcon} iconColor="text-green-600 bg-green-50" />
       </div>
 
       {/* Filter Bar */}
@@ -165,7 +165,7 @@ export default function UserManagement() {
                           <StatusBadge status={user.status} />
                        </td>
                        <td className="px-8 py-6 text-sm font-bold text-gray-500 tracking-tight">
-                          {user.role === 'LANDLORD' ? '5 Units' : user.role === 'TENANT' ? '1 Unit' : '-'}
+                          {user.role === 'LANDLORD' ? `${user._count?.properties || 0} Properties` : user.role === 'TENANT' ? (user.unitId ? '1 Unit' : '0 Units') : '-'}
                        </td>
                        <td className="px-8 py-6 text-sm font-semibold text-gray-400">
                           {user.lastLogin ? formatDateAgo(user.lastLogin) : 'Never'}
