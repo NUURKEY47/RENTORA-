@@ -1,45 +1,22 @@
+// src/modules/admin/admin.service.js
+
 import { adminRepository } from "./admin.repository.js";
 
 export const adminService = {
   getDashboardStats: async (user) => {
-    // If the admin is managedById (sub-admin), only count their portfolio
+    // If the admin is a sub-admin (has managedById), only count their portfolio
     const managedById = user.role === "ADMIN" && user.managedById ? user.id : null;
     
     const stats = await adminRepository.countDashboardStats(managedById);
     const transactions = await adminRepository.findRecentTransactions(managedById);
 
+    // Aligning the response perfectly with the Dashboard.jsx frontend
     return {
-      stats: {
-        totalProperties: { 
-          value: stats.properties, 
-          trend: 0, 
-          isPositive: true 
-        },
-        totalUnits: { 
-          value: stats.units, 
-          trend: 0, 
-          isPositive: true 
-        },
-        activeLandlords: { 
-          value: stats.landlords, 
-          trend: 0, 
-          isPositive: true 
-        },
-        activeTenants: { 
-          value: stats.tenants, 
-          trend: 0, 
-          isPositive: true 
-        },
-      },
-      recentTransactions: transactions.map(t => ({
-        id: t.id,
-        tenant: t.user.name,
-        property: t.invoice?.unit?.property?.name || "N/A",
-        date: t.paymentDate,
-        amount: t.amount,
-        status: "PAID",
-      })),
-      portfolioGrowth: []
+      properties: stats.properties,
+      units: stats.units,
+      landlords: stats.landlords,
+      tenants: stats.tenants,
+      recentTransactions: transactions // The repository already includes user and invoice relations
     };
   }
 };
