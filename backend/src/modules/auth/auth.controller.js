@@ -7,7 +7,12 @@ export const registry = async (req, res, next) => {
     sendResponse(res, {
       statusCode: 201,
       message: "User created successfully",
-      data: { name: user.name, email: user.email, role: user.role },
+      data: { 
+        name: user.name, 
+        email: user.email, 
+        role: user.role,
+        token 
+      },
     });
   } catch (error) {
     next(error);
@@ -29,7 +34,7 @@ export const login = async (req, res, next) => {
   }
 };
 
-// Check First Admin (moved to controller as function, called in middleware or directly)
+// Middleware to check for first admin registration or sub-admin creation
 export const checkFirstAdmin = async (req, res, next) => {
   try {
     const role = req.body.role;
@@ -40,8 +45,6 @@ export const checkFirstAdmin = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    res
-      .status(401)
-      .json({ message: " new admins require token for registration" });
+    res.status(401).json({ message: error.message || "Unauthorized registration attempt" });
   }
 };

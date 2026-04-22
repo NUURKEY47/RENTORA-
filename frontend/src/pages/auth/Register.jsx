@@ -1,5 +1,5 @@
-import { useState, useContext, useMemo } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { register } from "../../api/authService";
 import toast from "react-hot-toast";
@@ -25,11 +25,6 @@ export default function Register() {
 
   const { login: authLogin } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const isSetupMode = useMemo(() => {
-    return new URLSearchParams(location.search).get("setup") === "true";
-  }, [location.search]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,7 +134,6 @@ export default function Register() {
                   >
                     <option value="TENANT">Tenant</option>
                     <option value="LANDLORD">Landlord</option>
-                    {isSetupMode && <option value="ADMIN">Admin</option>}
                   </select>
                 </div>
               </div>
