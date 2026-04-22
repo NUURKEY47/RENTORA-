@@ -24,3 +24,8 @@ export const assignLandlord = async (propertyId, landlordId) => {
   const response = await api.put(`/properties/${propertyId}/assign-landlord`, { landlordId });
   return response.data;
 };
+
+export const getCategories = async () => {
+  const response = await api.get('/properties/categories');
+  return response.data;
+};

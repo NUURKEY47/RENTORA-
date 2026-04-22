@@ -61,9 +61,12 @@ import {
   getProperty,
   getPropertyById,
   deletePropertyById,
+  getAllCategories
 } from "./property.controller.js";
 
 const router = express.Router();
+
+router.get("/categories", verifyToken, getAllCategories);
 
 router.post("/", verifyToken, authorizeRoles("LANDLORD", "ADMIN"), validate(createPropertySchema), createProperty);
 router.put("/:id/assign-landlord", verifyToken, authorizeRoles("ADMIN"), validate(assignLandlordSchema), assignLandlord);

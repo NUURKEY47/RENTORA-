@@ -1,7 +1,21 @@
 // import prisma from "../../config/db.js";
 import AppError from "../../utils/AppError.js";
 import { propertyService } from "./property.service.js";
+import { categoryRepository } from "./category.repository.js";
 import sendResponse from "../../utils/sendResponse.js";
+
+export const getAllCategories = async (req, res, next) => {
+  try {
+    const categories = await categoryRepository.findAll();
+    sendResponse(res, {
+      message: "Categories fetched successfully",
+      data: categories,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 // i want to use the controller->service->repository format
 

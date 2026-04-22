@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { createProperty, updateProperty } from "../../api/propertyService";
+import { createProperty, updateProperty, getCategories } from "../../api/propertyService";
 import { getLandlords } from "../../api/landlordService";
 import { AuthContext } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
@@ -15,8 +15,10 @@ export default function PropertyForm({ property, onClose, onSuccess }) {
   });
   const [loading, setLoading] = useState(false);
   const [landlords, setLandlords] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    fetchCategories();
     if (property) {
       setFormData({
         name: property.name || "",
@@ -31,6 +33,15 @@ export default function PropertyForm({ property, onClose, onSuccess }) {
       fetchLandlords();
     }
   }, [property, role]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await getCategories();
+      setCategories(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch categories:", err);
+    }
+  };
 
   const fetchLandlords = async () => {
     try {
@@ -47,6 +58,10 @@ export default function PropertyForm({ property, onClose, onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.categoryId) {
+      toast.error("Please select a category");
+      return;
+    }
     setLoading(true);
     try {
       const payload = {
@@ -103,27 +118,35 @@ export default function PropertyForm({ property, onClose, onSuccess }) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Location</label>
-            <input
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
-              required
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Location</label>
+              <input
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Category ID</label>
-            <input
-              name="categoryId"
-              type="number"
-              value={formData.categoryId}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
-              required
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+              <select
+                name="categoryId"
+                value={formData.categoryId}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none bg-white"
+                required
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {role === "ADMIN" && (
@@ -142,6 +165,7 @@ export default function PropertyForm({ property, onClose, onSuccess }) {
                   </option>
                 ))}
               </select>
+
               <p className="text-[10px] text-gray-400 mt-1 italic uppercase tracking-wider pl-1">
                 Selected Landlord will be assigned to this property
               </p>
