@@ -5,7 +5,7 @@ export const adminRepository = {
     const propertyWhere = managedById ? { landlord: { managedById } } : {};
     const unitWhere = managedById ? { property: { landlord: { managedById } } } : {};
     
-    const [properties, units, landlords, tenants] = await Promise.all([
+    const [properties, units, landlords, tenants, unassigned] = await Promise.all([
       prisma.property.count({ where: propertyWhere }),
       prisma.unit.count({ where: unitWhere }),
       prisma.user.count({ 
@@ -20,9 +20,10 @@ export const adminRepository = {
           ...(managedById ? { managedById } : {})
         } 
       }),
+      prisma.property.count({ where: { landlordId: null } }),
     ]);
 
-    return { properties, units, landlords, tenants };
+    return { properties, units, landlords, tenants, unassigned };
   },
 
   findRecentTransactions: async (managedById, limit = 5) => {

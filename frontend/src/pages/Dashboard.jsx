@@ -101,6 +101,14 @@ export default function Dashboard() {
           icon={UserIcon} 
           iconColor="text-green-600 bg-green-50"
         />
+        <KpiCard 
+          title="Unassigned Portfolio" 
+          value={dashboardData?.unassignedProperties || 0} 
+          trend={0}
+          isPositive={false}
+          icon={ExclamationTriangleIcon} 
+          iconColor="text-red-600 bg-red-50"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

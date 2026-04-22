@@ -16,7 +16,9 @@ export const adminService = {
       units: stats.units,
       landlords: stats.landlords,
       tenants: stats.tenants,
+      unassignedProperties: stats.unassigned,
       recentTransactions: transactions // The repository already includes user and invoice relations
     };
+
   }
 };

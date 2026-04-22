@@ -165,15 +165,34 @@ export default function UserManagement() {
                           <StatusBadge status={user.status} />
                        </td>
                        <td className="px-8 py-6 text-sm font-bold text-gray-500 tracking-tight">
-                          {user.role === 'LANDLORD' ? `${user._count?.properties || 0} Properties` : user.role === 'TENANT' ? (user.unitId ? '1 Unit' : '0 Units') : '-'}
+                          {user.role === 'ADMIN' ? (
+                            <span className="text-blue-600 font-bold uppercase tracking-widest text-[10px]">Full Access</span>
+                          ) : user.role === 'LANDLORD' ? (
+                            `${user._count?.properties || 0} Properties`
+                          ) : (
+                            user.unitId ? '1 Unit' : 'No Unit'
+                          )}
                        </td>
                        <td className="px-8 py-6 text-sm font-semibold text-gray-400">
                           {user.lastLogin ? formatDateAgo(user.lastLogin) : 'Never'}
                        </td>
                        <td className="px-8 py-6 text-right">
-                          <button className="p-2 text-gray-300 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition">
-                             <EllipsisVerticalIcon className="h-5 w-5" />
-                          </button>
+                          <div className="flex justify-end space-x-2">
+                             <button 
+                               onClick={() => toast.success("Edit logic coming soon!")}
+                               className="p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                               title="Edit User"
+                             >
+                                <UsersIcon className="h-4 w-4" />
+                             </button>
+                             <button 
+                               onClick={() => toast.error("Delete logic coming soon!")}
+                               className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                               title="Delete User"
+                             >
+                                <EllipsisVerticalIcon className="h-4 w-4 rotate-90" />
+                             </button>
+                          </div>
                        </td>
                     </tr>
                   ))}
