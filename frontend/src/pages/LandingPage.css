@@ -1,0 +1,238 @@
+:root {
+  --primary: #0a6630; /* The Elite Rentora Green */
+  --primary-hover: #085226;
+  --navy: #0f172a;
+  --slate: #475569;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.landing-container {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--navy);
+  background: white;
+  overflow-x: hidden;
+}
+
+/* --- Navigation --- */
+.nav-sovereign {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 80px;
+  padding: 0 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--primary); }
+
+.nav-actions {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.btn-outline {
+  padding: 10px 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 100px;
+  text-decoration: none;
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover { background: #f8fafc; }
+
+.btn-filled {
+  padding: 10px 28px;
+  background: var(--primary);
+  color: white;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(10, 102, 48, 0.2);
+}
+
+/* --- Hero --- */
+.hero-sovereign {
+  position: relative;
+  height: 100vh;
+  background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.4)), 
+              url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  padding-top: 80px;
+}
+
+.hero-badge {
+  background: rgba(209, 250, 229, 0.2);
+  color: #d1fae5;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid rgba(209, 250, 229, 0.3);
+  margin-bottom: 24px;
+}
+
+.hero-sovereign h1 {
+  font-size: 72px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.hero-sovereign p {
+  font-size: 20px;
+  max-width: 700px;
+  opacity: 0.9;
+  margin-bottom: 40px;
+}
+
+/* --- Marketplace --- */
+.marketplace-section {
+  padding: 100px 10%;
+  background: white;
+}
+
+.search-bar-elite {
+  display: flex;
+  background: white;
+  padding: 12px;
+  border-radius: 100px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  max-width: 1000px;
+  margin: -60px auto 80px;
+  position: relative;
+  z-index: 10;
+  border: 1px solid #f1f5f9;
+}
+
+.search-field {
+  flex: 1;
+  padding: 0 30px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #f1f5f9;
+}
+
+.search-field:last-of-type { border: none; }
+
+.search-field label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+.search-field input {
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 4px 0;
+  outline: none;
+}
+
+.property-grid {
+  display: grid;
+  grid-template-cols: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.property-card {
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  height: 300px;
+  transition: transform 0.3s ease;
+}
+
+.property-card:hover { transform: translateY(-10px); }
+
+.property-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 40px 30px 30px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  color: white;
+}
+
+.property-type {
+  background: rgba(255,255,255,0.2);
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+}
+
+/* --- Demo Form --- */
+.demo-section {
+  padding: 100px 10%;
+  background: #f8fafc;
+  display: grid;
+  grid-template-cols: 1fr 1fr;
+  gap: 80px;
+}
+
+.demo-form-card {
+  background: white;
+  padding: 50px;
+  border-radius: 32px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+}
+
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+.input-group input, .input-group select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+/* --- Footer --- */
+.footer-sovereign {
+  background: #0f172a;
+  color: white;
+  padding: 80px 10%;
+  text-align: center;
+}
