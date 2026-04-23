@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllUsers } from "../../api/userService";
+import { getAllUsers, deleteUser, updateUser } from "../../api/userService";
 import {
   UsersIcon,
   KeyIcon,
@@ -45,6 +45,29 @@ export default function UserManagement() {
       toast.error("Failed to load users");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteUser = async (id, name) => {
+    if (window.confirm(`Are you sure you want to delete ${name}? This action cannot be undone.`)) {
+      try {
+        await deleteUser(id);
+        toast.success("User deleted successfully");
+        fetchUsers();
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Failed to delete user");
+      }
+    }
+  };
+
+  const handleToggleStatus = async (user) => {
+    const newStatus = user.status === 'active' ? 'inactive' : 'active';
+    try {
+      await updateUser(user.id, { status: newStatus });
+      toast.success(`User marked as ${newStatus}`);
+      fetchUsers();
+    } catch (err) {
+      toast.error("Failed to update user status");
     }
   };
 
@@ -179,14 +202,14 @@ export default function UserManagement() {
                        <td className="px-8 py-6 text-right">
                           <div className="flex justify-end space-x-2">
                              <button 
-                               onClick={() => toast.success("Edit logic coming soon!")}
+                               onClick={() => handleToggleStatus(user)}
                                className="p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                               title="Edit User"
+                               title="Toggle Status"
                              >
                                 <UsersIcon className="h-4 w-4" />
                              </button>
                              <button 
-                               onClick={() => toast.error("Delete logic coming soon!")}
+                               onClick={() => handleDeleteUser(user.id, user.name)}
                                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                                title="Delete User"
                              >

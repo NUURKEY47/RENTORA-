@@ -3,7 +3,8 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { getAllProperties, deleteProperty } from "../../api/propertyService";
 import toast from "react-hot-toast";
 import PropertyForm from "./PropertyForm";
-import { PlusIcon, BuildingOfficeIcon, PencilIcon, TrashIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import AssignLandlordModal from "./AssignLandlordModal";
+import { PlusIcon, BuildingOfficeIcon, PencilIcon, TrashIcon, MapPinIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 
 export default function PropertiesList() {
   const { role } = useContext(AuthContext);
@@ -11,6 +12,7 @@ export default function PropertiesList() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProperty, setEditingProperty] = useState(null);
+  const [assigningProperty, setAssigningProperty] = useState(null);
 
   useEffect(() => {
     fetchProperties();
@@ -132,12 +134,21 @@ export default function PropertiesList() {
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         {(role === "ADMIN" || role === "LANDLORD") && (
                           <div className="flex justify-end space-x-2">
-                            <button onClick={() => handleEdit(p)} className="p-2 text-gray-400 hover:text-blue-600 transition" title="Edit">
-                              <PencilIcon className="h-5 w-5" />
-                            </button>
-                            <button onClick={() => handleDelete(p.id)} className="p-2 text-gray-400 hover:text-red-600 transition" title="Delete">
-                              <TrashIcon className="h-5 w-5" />
-                            </button>
+                             {role === "ADMIN" && (
+                               <button 
+                                 onClick={() => setAssigningProperty(p)} 
+                                 className="p-2 text-gray-400 hover:text-emerald-600 transition" 
+                                 title="Assign Landlord"
+                               >
+                                 <UserPlusIcon className="h-5 w-5" />
+                               </button>
+                             )}
+                             <button onClick={() => handleEdit(p)} className="p-2 text-gray-400 hover:text-blue-600 transition" title="Edit">
+                               <PencilIcon className="h-5 w-5" />
+                             </button>
+                             <button onClick={() => handleDelete(p.id)} className="p-2 text-gray-400 hover:text-red-600 transition" title="Delete">
+                               <TrashIcon className="h-5 w-5" />
+                             </button>
                           </div>
                         )}
                       </td>
@@ -155,6 +166,16 @@ export default function PropertiesList() {
           property={editingProperty}
           onClose={() => setShowForm(false)}
           onSuccess={handleFormSuccess}
+        />
+      )}
+      {assigningProperty && (
+        <AssignLandlordModal
+          property={assigningProperty}
+          onClose={() => setAssigningProperty(null)}
+          onSuccess={() => {
+            setAssigningProperty(null);
+            fetchProperties();
+          }}
         />
       )}
     </>
