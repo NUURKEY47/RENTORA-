@@ -23,5 +23,5 @@ RUN npm run build
 # We use a tiny image to just hold the files for the Caddy volume
 FROM alpine:latest
 WORKDIR /app
-COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/dist .
 CMD ["tail", "-f", "/dev/null"]
