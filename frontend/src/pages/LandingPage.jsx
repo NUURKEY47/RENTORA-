@@ -4,11 +4,12 @@ import {
   BuildingOfficeIcon, 
   ChevronDownIcon,
   MagnifyingGlassIcon,
-  MapPinIcon,
-  CurrencyDollarIcon,
-  HomeIcon,
   CheckCircleIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  ChartBarIcon,
+  UserGroupIcon,
+  DocumentTextIcon,
+  BanknotesIcon
 } from '@heroicons/react/24/outline';
 import './LandingPage.css';
 
@@ -130,7 +131,6 @@ export default function LandingPage() {
 
         <div style={{ textAlign: 'center', marginTop: '60px' }}>
           <button 
-            onClick={() => toast.success("More properties coming soon!")}
             style={{ 
               background: 'transparent', 
               border: '2px solid #e2e8f0', 
@@ -145,81 +145,150 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Demo Section */}
-      <section className="demo-section">
-        <div>
-          <h2 style={{ fontSize: '42px', fontWeight: 800, marginBottom: '32px' }}>What to expect</h2>
-          <ul style={{ listStyle: 'none', padding: 0, spaceY: '24px' }}>
-            <li style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-              <CheckCircleIcon className="h-6 w-6 text-green-600" />
-              <div>
-                <p style={{ fontWeight: 700 }}>Hands-on tour of rent automation</p>
-                <p style={{ fontSize: '14px', color: '#64748b' }}>tenant communications, and financial reporting.</p>
-              </div>
-            </li>
-            <li style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-              <CheckCircleIcon className="h-6 w-6 text-green-600" />
-              <div>
-                <p style={{ fontWeight: 700 }}>Answers to specific questions</p>
-                <p style={{ fontSize: '14px', color: '#64748b' }}>Get direct consultation from a product specialist.</p>
-              </div>
-            </li>
-            <li style={{ display: 'flex', gap: '16px' }}>
-              <CheckCircleIcon className="h-6 w-6 text-green-600" />
-              <div>
-                <p style={{ fontWeight: 700 }}>Migration & Setup Guidance</p>
-                <p style={{ fontSize: '14px', color: '#64748b' }}>Assistance with migrating data and setting up your first properties.</p>
-              </div>
-            </li>
-          </ul>
-          
-          <div style={{ marginTop: '40px', padding: '24px', background: 'white', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ background: '#f1f5f9', padding: '12px', borderRadius: '12px' }}>
-              <EnvelopeIcon className="h-6 w-6 text-gray-600" />
+      {/* REINSTATED: Capabilities Section */}
+      <section className="capabilities-section" style={{ padding: '100px 10%', background: '#fff' }}>
+        <div style={{ marginBottom: '60px' }}>
+          <h2 style={{ fontSize: '42px', fontWeight: 800 }}>Rentora Platform Capabilities</h2>
+          <p style={{ color: '#64748b', maxWidth: '600px' }}>A radically simplified approach to complex real estate operations. Built to scale from 1 to 10,000 units effortlessly.</p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '30px', marginBottom: '30px' }}>
+          <div style={{ background: '#0f172a', borderRadius: '32px', padding: '50px', color: 'white' }}>
+            <div style={{ background: 'rgba(255,255,255,0.1)', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyCenter: 'center', marginBottom: '24px' }}>
+              <ChartBarIcon className="h-6 w-6 text-emerald-400" />
             </div>
-            <div>
-              <p style={{ fontSize: '12px', fontWeight: 700, color: '#94a3b8' }}>DIRECT CONTACT</p>
-              <a href="mailto:yessnoor143@gmail.com" style={{ fontSize: '18px', fontWeight: 700, color: '#0a6630', textDecoration: 'none' }}>yessnoor143@gmail.com</a>
+            <h3 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '16px' }}>Intelligent Portfolio Control</h3>
+            <p style={{ opacity: 0.7, lineHeight: 1.6 }}>Supervise residential, commercial, and mixed-use structures dynamically. Adjust rent caps, utility lines, and unit statuses in real-time without refreshing.</p>
+          </div>
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '32px', padding: '40px' }}>
+            <div style={{ background: 'white', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyCenter: 'center', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+              <UserGroupIcon className="h-6 w-6 text-emerald-600" />
             </div>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>Verified Sync</h3>
+            <p style={{ color: '#64748b', fontSize: '15px' }}>Deep integration with local identity verification to secure tenant data.</p>
           </div>
         </div>
 
-        <div className="demo-form-card">
-          <h3 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '8px' }}>Request a demo presentation</h3>
-          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '32px' }}>Tell us about your portfolio and we will reach out within one business day.</p>
-          
-          <form onSubmit={(e) => e.preventDefault()}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div className="input-group">
-                <label>First Name</label>
-                <input type="text" placeholder="Jane" />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '30px' }}>
+          <div style={{ background: '#ecfdf5', border: '1px solid #d1fae5', borderRadius: '32px', padding: '40px' }}>
+            <div style={{ background: 'white', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyCenter: 'center', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+              <DocumentTextIcon className="h-6 w-6 text-emerald-600" />
+            </div>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>Digital Leasing</h3>
+            <p style={{ color: '#065f46', fontSize: '15px', opacity: 0.8 }}>Generate, deploy, and execute binding lease agreements via SMS or secure email links. Zero paper, maximum speed.</p>
+          </div>
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '32px', padding: '40px' }}>
+            <div style={{ background: 'white', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyCenter: 'center', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+              <BanknotesIcon className="h-6 w-6 text-emerald-600" />
+            </div>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>Automated Reconciliation</h3>
+            <p style={{ color: '#64748b', fontSize: '15px' }}>Link directly to global gateways and local bank accounts. Rentora auto-identifies deposits and matches them to tenant ledgers instantly.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* REFINED: Presentation Section (Matching Screenshot 5 exactly) */}
+      <section className="demo-section" style={{ background: '#f8fafc', padding: '80px 5%' }}>
+        <div style={{ 
+          background: 'white', 
+          borderRadius: '40px', 
+          padding: '80px', 
+          display: 'grid', 
+          gridTemplateColumns: '1.2fr 1fr', 
+          gap: '100px',
+          boxShadow: '0 20px 80px rgba(0,0,0,0.03)',
+          border: '1px solid rgba(0,0,0,0.02)'
+        }}>
+          <div>
+            <h2 style={{ fontSize: '48px', fontWeight: 800, marginBottom: '40px', letterSpacing: '-1px' }}>What to expect</h2>
+            <ul style={{ listStyle: 'none', padding: 0 }}>
+              <li style={{ display: 'flex', gap: '20px', marginBottom: '32px', alignItems: 'flex-start' }}>
+                <CheckCircleIcon className="h-7 w-7 text-emerald-500 mt-1" />
+                <div>
+                  <p style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>Hands-on tour of rent automation</p>
+                  <p style={{ fontSize: '15px', color: '#64748b', marginTop: '4px' }}>tenant communications, and financial reporting.</p>
+                </div>
+              </li>
+              <li style={{ display: 'flex', gap: '20px', marginBottom: '32px', alignItems: 'flex-start' }}>
+                <CheckCircleIcon className="h-7 w-7 text-emerald-500 mt-1" />
+                <div>
+                  <p style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>Answers to your specific questions</p>
+                  <p style={{ fontSize: '15px', color: '#64748b', marginTop: '4px' }}>Get direct consultation from a product specialist.</p>
+                </div>
+              </li>
+              <li style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+                <CheckCircleIcon className="h-7 w-7 text-emerald-500 mt-1" />
+                <div>
+                  <p style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>Migration & Setup Guidance</p>
+                  <p style={{ fontSize: '15px', color: '#64748b', marginTop: '4px' }}>Assistance with migrating data and setting up your first properties.</p>
+                </div>
+              </li>
+            </ul>
+            
+            {/* Contact Card */}
+            <div style={{ 
+              marginTop: '60px', 
+              padding: '24px 32px', 
+              background: '#f8fafc', 
+              borderRadius: '24px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '20px',
+              width: 'fit-content'
+            }}>
+              <div style={{ background: 'white', padding: '12px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                <EnvelopeIcon className="h-6 w-6 text-gray-600" />
+              </div>
+              <div>
+                <p style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8', letterSpacing: '1px' }}>DIRECT CONTACT</p>
+                <a href="mailto:yessnoor143@gmail.com" style={{ fontSize: '20px', fontWeight: 800, color: '#0a6630', textDecoration: 'none' }}>yessnoor143@gmail.com</a>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ 
+            background: 'white', 
+            padding: '50px', 
+            borderRadius: '32px', 
+            boxShadow: '0 30px 60px rgba(0,0,0,0.05)',
+            border: '1px solid #f1f5f9'
+          }}>
+            <h3 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '12px' }}>Request a demo presentation</h3>
+            <p style={{ fontSize: '15px', color: '#64748b', marginBottom: '40px' }}>Tell us about your portfolio and we will reach out within one business day.</p>
+            
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div className="input-group">
+                  <label>First Name</label>
+                  <input type="text" placeholder="Jane" />
+                </div>
+                <div className="input-group">
+                  <label>Last Name</label>
+                  <input type="text" placeholder="Doe" />
+                </div>
               </div>
               <div className="input-group">
-                <label>Last Name</label>
-                <input type="text" placeholder="Doe" />
+                <label>Email Address</label>
+                <input type="email" placeholder="jane@example.com" />
               </div>
-            </div>
-            <div className="input-group">
-              <label>Email Address</label>
-              <input type="email" placeholder="jane@example.com" />
-            </div>
-            <div className="input-group">
-              <label>Phone Number</label>
-              <input type="tel" placeholder="+254 700 000 000" />
-            </div>
-            <div className="input-group">
-              <label>Portfolio Size</label>
-              <select>
-                <option>1-50 Units</option>
-                <option>51-200 Units</option>
-                <option>201-500 Units</option>
-                <option>500+ Units</option>
-              </select>
-            </div>
-            <button className="btn-filled" style={{ width: '100%', padding: '16px', fontSize: '16px', border: 'none', cursor: 'pointer' }}>
-              Request Presentation
-            </button>
-          </form>
+              <div className="input-group">
+                <label>Phone Number</label>
+                <input type="tel" placeholder="+254 700 000 000" />
+              </div>
+              <div className="input-group">
+                <label>Portfolio Size</label>
+                <select style={{ background: 'white' }}>
+                  <option>1-50 Units</option>
+                  <option>51-200 Units</option>
+                  <option>201-500 Units</option>
+                  <option>500+ Units</option>
+                </select>
+              </div>
+              <button className="btn-filled" style={{ width: '100%', padding: '18px', fontSize: '16px', border: 'none', cursor: 'pointer', marginTop: '10px' }}>
+                Request Presentation
+              </button>
+            </form>
+          </div>
         </div>
       </section>
 
