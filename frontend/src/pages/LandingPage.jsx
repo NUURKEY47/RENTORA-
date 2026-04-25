@@ -9,36 +9,33 @@ import {
   ChartBarIcon,
   UserGroupIcon,
   DocumentTextIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  HomeModernIcon,
+  GlobeAltIcon,
+  ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 import './LandingPage.css';
 
 const PROPERTIES_DB = [
-  { 
-    id: 1, 
-    type: "Apartment", 
-    name: "Azure Glass Villa", 
-    img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000",
-    price: "From $1.2M"
-  },
-  { 
-    id: 2, 
-    type: "Townhouse", 
-    name: "Emerald Heights", 
-    img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000",
-    price: "From $2.5M"
-  },
-  { 
-    id: 3, 
-    type: "Studio", 
-    name: "Sovereign Urban Loft", 
-    img: "https://images.unsplash.com/photo-1600607687940-4e2a09695d51?q=80&w=1000",
-    price: "From $850K"
-  }
+  { id: 1, type: "Apartment", name: "Azure Glass Villa", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000", price: "From $1.2M" },
+  { id: 2, type: "Townhouse", name: "Emerald Heights", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000", price: "From $2.5M" },
+  { id: 3, type: "Studio", name: "Sovereign Urban Loft", img: "https://images.unsplash.com/photo-1600607687940-4e2a09695d51?q=80&w=1000", price: "From $850K" },
+  { id: 4, type: "Villa", name: "The Ivory Estate", img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1000", price: "From $3.2M" },
+  { id: 5, type: "Mansion", name: "Midnight Penthouse", img: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000", price: "From $5.1M" },
+  { id: 6, type: "Resort", name: "Emerald Bay Retreat", img: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1000", price: "From $2.8M" }
 ];
 
 export default function LandingPage() {
-  const [properties, setProperties] = useState(PROPERTIES_DB);
+  const [showCount, setShowCount] = useState(3);
+
+  const handlePresentationRequest = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    const subject = `Presentation Request: ${data.firstName} ${data.lastName}`;
+    const body = `Hello, I would like to request a presentation.\n\nName: ${data.firstName} ${data.lastName}\nEmail: ${data.email}\nPhone: ${data.phone}\nPortfolio: ${data.portfolioSize}`;
+    window.location.href = `mailto:yessnoor143@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
 
   return (
     <div className="landing-container">
@@ -52,9 +49,25 @@ export default function LandingPage() {
         </div>
 
         <div className="nav-links">
-          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            Solutions <ChevronDownIcon className="h-4 w-4" />
-          </a>
+          <div className="nav-item-container">
+            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              Solutions <ChevronDownIcon className="h-4 w-4" />
+            </a>
+            <div className="dropdown-sovereign">
+              <a href="#" className="dropdown-link">
+                <HomeModernIcon className="h-5 w-5 text-emerald-600" />
+                <span>For Landlords</span>
+              </a>
+              <a href="#" className="dropdown-link">
+                <GlobeAltIcon className="h-5 w-5 text-emerald-600" />
+                <span>Global Managers</span>
+              </a>
+              <a href="#" className="dropdown-link">
+                <ShieldCheckIcon className="h-5 w-5 text-emerald-600" />
+                <span>Security First</span>
+              </a>
+            </div>
+          </div>
           <a href="#marketplace">Marketplace</a>
           <a href="#pricing">Pricing</a>
         </div>
@@ -68,12 +81,9 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <header className="hero-sovereign">
-        <div className="hero-badge">
-           Engineered for Maximum Yield
-        </div>
+        <div className="hero-badge">Engineered for Maximum Yield</div>
         <h1>The Sovereign <br /> Real Estate OS.</h1>
         <p>Intelligent Software for Elite Landlords & Managers. Reimagining operations with radically simplified, bank-grade infrastructure.</p>
-        
         <div style={{ display: 'flex', gap: '16px' }}>
           <Link to="/register" className="btn-filled" style={{ padding: '16px 40px', fontSize: '16px' }}>Setup Account</Link>
           <Link to="/login" className="btn-outline" style={{ background: 'white', padding: '16px 40px', fontSize: '16px' }}>View Tour</Link>
@@ -95,18 +105,7 @@ export default function LandingPage() {
             <label>PROPERTY TYPE</label>
             <input type="text" placeholder="All Types" />
           </div>
-          <button style={{ 
-            background: '#0a6630', 
-            color: 'white', 
-            padding: '0 40px', 
-            borderRadius: '100px', 
-            border: 'none', 
-            fontWeight: 700,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            cursor: 'pointer'
-          }}>
+          <button style={{ background: '#0a6630', color: 'white', padding: '0 40px', borderRadius: '100px', border: 'none', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
             <MagnifyingGlassIcon className="h-5 w-5" /> Search
           </button>
         </div>
@@ -117,7 +116,7 @@ export default function LandingPage() {
         </div>
 
         <div className="property-grid">
-          {properties.map((p) => (
+          {PROPERTIES_DB.slice(0, showCount).map((p) => (
             <div key={p.id} className="property-card">
               <img src={p.img} alt={p.name} className="property-img" />
               <div className="property-overlay">
@@ -129,68 +128,54 @@ export default function LandingPage() {
           ))}
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '60px' }}>
-          <button 
-            style={{ 
-              background: 'transparent', 
-              border: '2px solid #e2e8f0', 
-              padding: '12px 32px', 
-              borderRadius: '12px', 
-              fontWeight: 700,
-              cursor: 'pointer'
-            }}
-          >
-            Show more properties
-          </button>
-        </div>
+        {showCount < PROPERTIES_DB.length && (
+          <div style={{ textAlign: 'center', marginTop: '60px' }}>
+            <button 
+              onClick={() => setShowCount(PROPERTIES_DB.length)}
+              style={{ background: 'transparent', border: '2px solid #e2e8f0', padding: '12px 32px', borderRadius: '12px', fontWeight: 700, cursor: 'pointer' }}
+            >
+              Show more properties
+            </button>
+          </div>
+        )}
       </section>
 
-      {/* REINSTATED: Capabilities Section */}
-      <section className="capabilities-section" style={{ padding: '100px 10%', background: '#fff' }}>
+      {/* REINSTATED & CONSOLIDATED: Capabilities & Presentation Section */}
+      <section className="capabilities-section" style={{ padding: '0 10% 100px', background: '#fff' }}>
         <div style={{ marginBottom: '60px' }}>
           <h2 style={{ fontSize: '42px', fontWeight: 800 }}>Rentora Platform Capabilities</h2>
-          <p style={{ color: '#64748b', maxWidth: '600px' }}>A radically simplified approach to complex real estate operations. Built to scale from 1 to 10,000 units effortlessly.</p>
+          <p style={{ color: '#64748b', maxWidth: '600px' }}>A radically simplified approach to complex real estate operations.</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '30px', marginBottom: '30px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '30px', marginBottom: '80px' }}>
           <div style={{ background: '#0f172a', borderRadius: '32px', padding: '50px', color: 'white' }}>
-            <div style={{ background: 'rgba(255,255,255,0.1)', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyCenter: 'center', marginBottom: '24px' }}>
+            <div style={{ background: 'rgba(255,255,255,0.1)', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
               <ChartBarIcon className="h-6 w-6 text-emerald-400" />
             </div>
             <h3 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '16px' }}>Intelligent Portfolio Control</h3>
             <p style={{ opacity: 0.7, lineHeight: 1.6 }}>Supervise residential, commercial, and mixed-use structures dynamically. Adjust rent caps, utility lines, and unit statuses in real-time without refreshing.</p>
           </div>
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '32px', padding: '40px' }}>
-            <div style={{ background: 'white', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyCenter: 'center', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-              <UserGroupIcon className="h-6 w-6 text-emerald-600" />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '32px', padding: '40px', flex: 1 }}>
+              <div style={{ background: 'white', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                <UserGroupIcon className="h-6 w-6 text-emerald-600" />
+              </div>
+              <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>Verified Sync</h3>
+              <p style={{ color: '#64748b', fontSize: '15px' }}>Deep integration with identity verification to secure tenant data.</p>
             </div>
-            <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>Verified Sync</h3>
-            <p style={{ color: '#64748b', fontSize: '15px' }}>Deep integration with local identity verification to secure tenant data.</p>
+            <div style={{ background: '#ecfdf5', border: '1px solid #d1fae5', borderRadius: '32px', padding: '40px', flex: 1 }}>
+              <div style={{ background: 'white', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                <DocumentTextIcon className="h-6 w-6 text-emerald-600" />
+              </div>
+              <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>Digital Leasing</h3>
+              <p style={{ color: '#065f46', fontSize: '15px' }}>Generate and execute binding lease agreements via SMS.</p>
+            </div>
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '30px' }}>
-          <div style={{ background: '#ecfdf5', border: '1px solid #d1fae5', borderRadius: '32px', padding: '40px' }}>
-            <div style={{ background: 'white', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyCenter: 'center', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-              <DocumentTextIcon className="h-6 w-6 text-emerald-600" />
-            </div>
-            <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>Digital Leasing</h3>
-            <p style={{ color: '#065f46', fontSize: '15px', opacity: 0.8 }}>Generate, deploy, and execute binding lease agreements via SMS or secure email links. Zero paper, maximum speed.</p>
-          </div>
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '32px', padding: '40px' }}>
-            <div style={{ background: 'white', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyCenter: 'center', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-              <BanknotesIcon className="h-6 w-6 text-emerald-600" />
-            </div>
-            <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>Automated Reconciliation</h3>
-            <p style={{ color: '#64748b', fontSize: '15px' }}>Link directly to global gateways and local bank accounts. Rentora auto-identifies deposits and matches them to tenant ledgers instantly.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* REFINED: Presentation Section (Matching Screenshot 5 exactly) */}
-      <section className="demo-section" style={{ background: '#f8fafc', padding: '80px 5%' }}>
+        {/* Presentation Card (Nested in the same flow) */}
         <div style={{ 
-          background: 'white', 
+          background: '#f8fafc', 
           borderRadius: '40px', 
           padding: '80px', 
           display: 'grid', 
@@ -216,27 +201,9 @@ export default function LandingPage() {
                   <p style={{ fontSize: '15px', color: '#64748b', marginTop: '4px' }}>Get direct consultation from a product specialist.</p>
                 </div>
               </li>
-              <li style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-                <CheckCircleIcon className="h-7 w-7 text-emerald-500 mt-1" />
-                <div>
-                  <p style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>Migration & Setup Guidance</p>
-                  <p style={{ fontSize: '15px', color: '#64748b', marginTop: '4px' }}>Assistance with migrating data and setting up your first properties.</p>
-                </div>
-              </li>
             </ul>
-            
-            {/* Contact Card */}
-            <div style={{ 
-              marginTop: '60px', 
-              padding: '24px 32px', 
-              background: '#f8fafc', 
-              borderRadius: '24px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '20px',
-              width: 'fit-content'
-            }}>
-              <div style={{ background: 'white', padding: '12px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+            <div style={{ marginTop: '60px', padding: '24px 32px', background: 'white', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '20px', width: 'fit-content' }}>
+              <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '12px' }}>
                 <EnvelopeIcon className="h-6 w-6 text-gray-600" />
               </div>
               <div>
@@ -246,45 +213,38 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div style={{ 
-            background: 'white', 
-            padding: '50px', 
-            borderRadius: '32px', 
-            boxShadow: '0 30px 60px rgba(0,0,0,0.05)',
-            border: '1px solid #f1f5f9'
-          }}>
+          <div style={{ background: 'white', padding: '50px', borderRadius: '32px', boxShadow: '0 30px 60px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
             <h3 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '12px' }}>Request a demo presentation</h3>
-            <p style={{ fontSize: '15px', color: '#64748b', marginBottom: '40px' }}>Tell us about your portfolio and we will reach out within one business day.</p>
-            
-            <form onSubmit={(e) => e.preventDefault()}>
+            <p style={{ fontSize: '15px', color: '#64748b', marginBottom: '40px' }}>Tell us about your portfolio.</p>
+            <form onSubmit={handlePresentationRequest}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                 <div className="input-group">
                   <label>First Name</label>
-                  <input type="text" placeholder="Jane" />
+                  <input name="firstName" type="text" placeholder="Jane" required />
                 </div>
                 <div className="input-group">
                   <label>Last Name</label>
-                  <input type="text" placeholder="Doe" />
+                  <input name="lastName" type="text" placeholder="Doe" required />
                 </div>
               </div>
               <div className="input-group">
                 <label>Email Address</label>
-                <input type="email" placeholder="jane@example.com" />
+                <input name="email" type="email" placeholder="jane@example.com" required />
               </div>
               <div className="input-group">
                 <label>Phone Number</label>
-                <input type="tel" placeholder="+254 700 000 000" />
+                <input name="phone" type="tel" placeholder="+254 700 000 000" required />
               </div>
               <div className="input-group">
                 <label>Portfolio Size</label>
-                <select style={{ background: 'white' }}>
+                <select name="portfolioSize" style={{ background: 'white' }}>
                   <option>1-50 Units</option>
                   <option>51-200 Units</option>
                   <option>201-500 Units</option>
                   <option>500+ Units</option>
                 </select>
               </div>
-              <button className="btn-filled" style={{ width: '100%', padding: '18px', fontSize: '16px', border: 'none', cursor: 'pointer', marginTop: '10px' }}>
+              <button type="submit" className="btn-filled" style={{ width: '100%', padding: '18px', fontSize: '16px', border: 'none', cursor: 'pointer', marginTop: '10px' }}>
                 Request Presentation
               </button>
             </form>
@@ -300,14 +260,11 @@ export default function LandingPage() {
           </div>
           <span style={{ fontSize: '24px', fontWeight: 800, letterSpacing: '-0.5px' }}>Rentora</span>
         </div>
-        
         <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginBottom: '40px', fontSize: '14px', opacity: 0.7 }}>
           <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Solutions</a>
           <a href="#marketplace" style={{ color: 'white', textDecoration: 'none' }}>Marketplace</a>
           <a href="#pricing" style={{ color: 'white', textDecoration: 'none' }}>Pricing</a>
-          <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Log in</a>
         </div>
-
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '40px', fontSize: '12px', opacity: 0.5 }}>
           © 2024 Rentora Technologies. Built for the future of global real estate.
         </div>
