@@ -22,7 +22,7 @@ import './LandingPage.css';
 const PROPERTIES_DB = [
   { id: 1, type: "Apartment", location: "Nairobi", name: "Azure Glass Villa", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000", price: 1200000 },
   { id: 2, type: "Townhouse", location: "Mombasa", name: "Emerald Heights", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000", price: 2500000 },
-  { id: 3, type: "Studio", location: "Nairobi", name: "Sovereign Urban Loft", img: "https://images.unsplash.com/photo-1600607687940-4e2a09695d51?q=80&w=1000", price: 850000 },
+  { id: 3, type: "Studio", location: "Nairobi", name: "Sovereign Urban Loft", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1000", price: 850000 },
   { id: 4, type: "Villa", location: "Naivasha", name: "The Ivory Estate", img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1000", price: 3200000 },
   { id: 5, type: "Mansion", location: "Nairobi", name: "Midnight Penthouse", img: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000", price: 5100000 },
   { id: 6, type: "Resort", location: "Diani", name: "Emerald Bay Retreat", img: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1000", price: 2800000 }
