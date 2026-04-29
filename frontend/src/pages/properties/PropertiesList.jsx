@@ -59,12 +59,12 @@ export default function PropertiesList() {
   return (
     <>
       <header className="bg-white border-b border-gray-200">
-        <div className="px-6 py-4 flex items-center justify-between">
+        <div className="px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h1 className="text-xl font-bold text-gray-900">Properties Management</h1>
           {(role === "ADMIN" || role === "LANDLORD") && (
             <button
               onClick={handleCreateNew}
-              className="flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm"
+              className="flex items-center justify-center w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
               Add Property

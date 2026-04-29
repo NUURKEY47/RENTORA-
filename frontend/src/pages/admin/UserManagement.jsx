@@ -89,17 +89,17 @@ export default function UserManagement() {
 
   return (
     <div className="p-8 space-y-10 bg-gray-50/30 min-h-screen">
-      <header className="flex justify-between items-end">
+      <header className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
         <div>
            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">User Management</h1>
            <p className="text-gray-400 font-bold text-sm mt-1 uppercase tracking-wider">Manage system access for landlords, tenants, and admins</p>
         </div>
-        <div className="flex space-x-3">
-           <button className="flex items-center px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-gray-50 transition shadow-sm">
+        <div className="flex space-x-3 w-full sm:w-auto">
+           <button className="flex-1 sm:flex-none flex justify-center items-center px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-gray-50 transition shadow-sm">
               <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
               Export
            </button>
-           <button className="flex items-center px-6 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-blue-700 transition shadow-lg shadow-blue-100">
+           <button className="flex-1 sm:flex-none flex justify-center items-center px-6 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-blue-700 transition shadow-lg shadow-blue-100">
               <UserPlusIcon className="h-4 w-4 mr-2" />
               Add User
            </button>

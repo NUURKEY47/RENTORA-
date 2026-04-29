@@ -15,7 +15,9 @@ import {
   ShieldCheckIcon,
   ArrowRightIcon,
   ChatBubbleLeftRightIcon,
-  SparklesIcon
+  SparklesIcon,
+  Bars3Icon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import './LandingPage.css';
 
@@ -31,6 +33,7 @@ const PROPERTIES_DB = [
 export default function LandingPage() {
   const [showCount, setShowCount] = useState(3);
   const [filters, setFilters] = useState({ location: '', type: '', maxPrice: '' });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const filteredProperties = useMemo(() => {
     return PROPERTIES_DB.filter(p => {
@@ -50,6 +53,19 @@ export default function LandingPage() {
             <BuildingOfficeIcon className="h-6 w-6 text-white" />
           </div>
           <span style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.5px' }}>Rentora</span>
+        </div>
+
+        {/* Mobile Toggle */}
+        <div 
+          className="nav-mobile-toggle" 
+          style={{ display: 'none' }} /* Hidden by default via CSS, overridden by media query */
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? (
+            <XMarkIcon className="h-8 w-8 text-slate-800" />
+          ) : (
+            <Bars3Icon className="h-8 w-8 text-slate-800" />
+          )}
         </div>
 
         <div className="nav-links">
@@ -81,6 +97,18 @@ export default function LandingPage() {
           <a href="#presentation" className="btn-outline">Presentation</a>
           <Link to="/register" className="btn-filled">Registry</Link>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="nav-mobile-menu">
+            <a href="#marketplace" onClick={() => setIsMobileMenuOpen(false)}>Marketplace</a>
+            <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)}>Pricing</a>
+            <a href="#presentation" onClick={() => setIsMobileMenuOpen(false)}>Presentation</a>
+            <div style={{ borderTop: '1px solid #f1f5f9', margin: '10px 0' }}></div>
+            <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>Log in</Link>
+            <Link to="/register" style={{ color: '#0a6630' }} onClick={() => setIsMobileMenuOpen(false)}>Create Account</Link>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -88,7 +116,7 @@ export default function LandingPage() {
         <div className="hero-badge">Engineered for Maximum Yield</div>
         <h1>The Sovereign <br /> Real Estate OS.</h1>
         <p>Intelligent Software for Elite Landlords & Managers. Reimagining operations with radically simplified, bank-grade infrastructure.</p>
-        <div style={{ display: 'flex', gap: '16px' }}>
+        <div className="hero-buttons" style={{ display: 'flex', gap: '16px' }}>
           <Link to="/register" className="btn-filled" style={{ padding: '16px 40px', fontSize: '16px' }}>Setup Account</Link>
           <a href="#marketplace" className="btn-outline" style={{ background: 'white', padding: '16px 40px', fontSize: '16px' }}>View Marketplace</a>
         </div>

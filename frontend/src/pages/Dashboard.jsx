@@ -194,7 +194,7 @@ export default function Dashboard() {
 
   const renderLandlordDashboard = () => (
     <div className="p-8 space-y-10 bg-gray-50/30 min-h-screen">
-      <header className="flex justify-between items-end">
+      <header className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
             Dashboard Overview
@@ -205,7 +205,7 @@ export default function Dashboard() {
         </div>
         <Link
           to="/properties"
-          className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-blue-700 transition shadow-lg shadow-blue-100"
+          className="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-blue-700 transition shadow-lg shadow-blue-100"
         >
           <PlusIcon className="h-4 w-4 mr-2" />
           Add Property

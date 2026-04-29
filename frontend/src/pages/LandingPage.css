@@ -343,3 +343,141 @@
   transition: color 0.2s;
 }
 .footer-col ul li a:hover { color: white; }
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  /* Navigation */
+  .nav-sovereign {
+    padding: 0 5%;
+    height: 70px;
+  }
+  
+  .nav-links, .nav-actions {
+    display: none; /* Hide default nav on mobile */
+  }
+
+  .nav-mobile-toggle {
+    display: block; /* Show hamburger icon */
+    cursor: pointer;
+  }
+
+  .nav-mobile-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 20px 5%;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    gap: 20px;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .nav-mobile-menu a {
+    text-decoration: none;
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  /* Hero Section */
+  .hero-sovereign {
+    padding-top: 60px;
+  }
+
+  .hero-sovereign h1 {
+    font-size: 42px;
+  }
+
+  .hero-sovereign p {
+    font-size: 16px;
+    padding: 0 20px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .hero-buttons a {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Marketplace / Search Bar */
+  .marketplace-section {
+    padding: 60px 5%;
+  }
+
+  .search-bar-elite {
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 20px;
+    gap: 16px;
+    margin-top: -30px;
+  }
+
+  .search-field {
+    border-right: none;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 10px 0;
+    border-radius: 0;
+  }
+
+  .search-field:last-of-type {
+    border-bottom: none;
+  }
+
+  /* Capabilities & Demo Section */
+  .capabilities-section, .demo-section {
+    padding: 60px 5%;
+  }
+
+  .demo-section {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .demo-form-card {
+    padding: 30px 20px;
+  }
+
+  .capabilities-grid, .presentation-grid {
+    grid-template-columns: 1fr !important; /* Override inline styles */
+    gap: 30px;
+  }
+
+  /* Pricing */
+  .pricing-section {
+    padding: 60px 5%;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-card.featured {
+    transform: none;
+  }
+
+  /* Footer */
+  .footer-sovereign {
+    padding: 40px 5% 20px;
+  }
+
+  .footer-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer-col ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+}

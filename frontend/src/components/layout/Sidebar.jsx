@@ -15,9 +15,10 @@ import {
   ChatBubbleLeftEllipsisIcon,
   Square3Stack3DIcon,
   MagnifyingGlassIcon,
+  XMarkIcon
 } from "@heroicons/react/24/outline";
 
-export default function Sidebar() {
+export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const { role, user, logout } = useContext(AuthContext);
   const location = useLocation();
 
@@ -58,6 +59,7 @@ export default function Sidebar() {
       <Link
         key={item.name}
         to={item.path}
+        onClick={() => setSidebarOpen(false)}
         className={`flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 group ${
           isActive
             ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
@@ -71,33 +73,46 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-72 bg-white border-r border-gray-100 min-h-screen flex flex-col shrink-0 sticky top-0">
-      <div className="p-8">
-        <div className="flex items-center space-x-3 group px-2 mb-2">
-          <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
-            <svg viewBox="0 0 40 40" className="w-full h-full text-slate-900 fill-current">
-              <path d="M20 4L4 16H8V32H32V16H36L20 4Z" className="opacity-10 text-emerald-500" />
-              <path d="M20 4L4 16H36L20 4Z" />
-              <text x="50%" y="75%" textAnchor="middle" className="text-[18px] font-black fill-slate-900">R</text>
-            </svg>
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white flex items-center justify-center text-[8px] text-white">🔑</div>
-          </div>
-          <span className="text-2xl font-black text-slate-900 tracking-tight group-hover:text-emerald-500 transition-colors">Rentora</span>
-        </div>
-      </div>
+    <>
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-gray-900/50 backdrop-blur-sm lg:hidden transition-opacity" 
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-      <nav className="flex-1 px-4 space-y-8 overflow-y-auto custom-scrollbar">
-        <div>
-          <div className="space-y-1">
-            {currentMenuItems.map((item) => <NavItem key={item.name} item={item} />)}
+      {/* Sidebar Content */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-gray-100 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:flex flex-col h-full ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="p-6 lg:p-8 flex justify-between items-center">
+          <div className="flex items-center space-x-3 group px-2 mb-2">
+            <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
+              <svg viewBox="0 0 40 40" className="w-full h-full text-slate-900 fill-current">
+                <path d="M20 4L4 16H8V32H32V16H36L20 4Z" className="opacity-10 text-emerald-500" />
+                <path d="M20 4L4 16H36L20 4Z" />
+                <text x="50%" y="75%" textAnchor="middle" className="text-[18px] font-black fill-slate-900">R</text>
+              </svg>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white flex items-center justify-center text-[8px] text-white">🔑</div>
+            </div>
+            <span className="text-2xl font-black text-slate-900 tracking-tight group-hover:text-emerald-500 transition-colors">Rentora</span>
           </div>
+          <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-400 hover:text-gray-600">
+            <XMarkIcon className="h-6 w-6" />
+          </button>
         </div>
 
-        {systemItems.length > 0 && (
+        <nav className="flex-1 px-4 space-y-8 overflow-y-auto custom-scrollbar">
           <div>
-            <p className="px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">System</p>
             <div className="space-y-1">
-              {systemItems.map((item) => <NavItem key={item.name} item={item} />)}
+              {currentMenuItems.map((item) => <NavItem key={item.name} item={item} />)}
+            </div>
+          </div>
+
+          {systemItems.length > 0 && (
+            <div>
+              <p className="px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">System</p>
+              <div className="space-y-1">
+                {systemItems.map((item) => <NavItem key={item.name} item={item} />)}
             </div>
           </div>
         )}
