@@ -137,5 +137,6 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
         </button>
       </div>
     </aside>
+    </>
   );
 }
