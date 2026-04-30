@@ -58,7 +58,6 @@ export default function LandingPage() {
         {/* Mobile Toggle */}
         <div 
           className="nav-mobile-toggle" 
-          style={{ display: 'none' }} /* Hidden by default via CSS, overridden by media query */
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? (
@@ -247,7 +246,7 @@ export default function LandingPage() {
 
       {/* Presentation Section (FormSubmit) */}
       <section id="presentation" className="demo-section">
-        <div style={{ background: 'white', borderRadius: '40px', padding: '80px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '100px' }}>
+        <div className="presentation-grid">
           <div>
             <h2 style={{ fontSize: '48px', fontWeight: 800, marginBottom: '40px' }}>Request a Presentation</h2>
             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -271,7 +270,7 @@ export default function LandingPage() {
               <input type="hidden" name="_subject" value="New Presentation Request from Landing Page" />
               <input type="hidden" name="_template" value="table" />
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="form-name-row">
                 <div className="input-group"><label>First Name</label><input name="First_Name" type="text" placeholder="Jane" required /></div>
                 <div className="input-group"><label>Last Name</label><input name="Last_Name" type="text" placeholder="Doe" required /></div>
               </div>

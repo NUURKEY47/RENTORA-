@@ -102,6 +102,10 @@
   align-items: center;
 }
 
+.nav-mobile-toggle {
+  display: none; /* Hidden on desktop */
+}
+
 .btn-outline {
   padding: 10px 24px;
   border: 1px solid #e2e8f0;
@@ -293,10 +297,24 @@
 }
 
 .demo-form-card {
+  background: #f8fafc;
+  padding: 40px;
+  border-radius: 24px;
+}
+
+.presentation-grid {
   background: white;
-  padding: 50px;
-  border-radius: 32px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+  border-radius: 40px;
+  padding: 80px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 100px;
+}
+
+.form-name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 .input-group { margin-bottom: 20px; }
@@ -432,6 +450,11 @@
     border-bottom: none;
   }
 
+  .search-field input, .search-field select, .search-field button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
   /* Capabilities & Demo Section */
   .capabilities-section, .demo-section {
     padding: 60px 5%;
@@ -446,9 +469,13 @@
     padding: 30px 20px;
   }
 
-  .capabilities-grid, .presentation-grid {
+  .capabilities-grid, .presentation-grid, .form-name-row {
     grid-template-columns: 1fr !important; /* Override inline styles */
     gap: 30px;
+  }
+
+  .presentation-grid {
+    padding: 30px 20px;
   }
 
   /* Pricing */
