@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 
 export const landlordService = {
   createLandlord: async (data, currentUser) => {
+    console.log(data);
+
     // 1. Force the role to LANDLORD
     data.role = "LANDLORD";
 

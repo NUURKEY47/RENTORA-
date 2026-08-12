@@ -2,9 +2,6 @@ import { userService } from "./user.service.js";
 import sendResponse from "../../utils/sendResponse.js";
 import AppError from "../../utils/AppError.js";
 
-
-
-
 export const getAllUsers = async (req, res, next) => {
   try {
     const users = await userService.getAllUsers(req.query, req.user);

@@ -3,8 +3,7 @@ import AppError from "../../utils/AppError.js";
 import bcrypt from "bcrypt";
 
 export const userService = {
- 
-   getAllUsers: async (query, user) => {
+  getAllUsers: async (query, user) => {
     const where = {};
 
     if (query.role) {
@@ -17,6 +16,8 @@ export const userService = {
         mode: "insensitive",
       };
     }
+
+    console.log(where);
 
     // Sub-admin restriction
     if (user.role === "ADMIN" && user.managedById) {
@@ -59,7 +60,11 @@ export const userService = {
     }
 
     // Security: Sub-admins cannot reassign users
-    if (data.managedById && currentUser.role === "ADMIN" && currentUser.managedById) {
+    if (
+      data.managedById &&
+      currentUser.role === "ADMIN" &&
+      currentUser.managedById
+    ) {
       throw new AppError("Only super-admin can assign or reassign users", 403);
     }
 
