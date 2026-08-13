@@ -8,15 +8,14 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY prisma ./prisma/
 
+# Copy application code
+COPY . .
+
 # Install dependencies 
-# Using --omit=dev for production efficiency
 RUN npm install --omit=dev
 
-# Generate Prisma Client
+# Generate Prisma Client for Alpine
 RUN npx prisma generate
-
-# Copy the rest of the application code
-COPY . .
 
 # Expose the port the app runs on
 EXPOSE 3000
