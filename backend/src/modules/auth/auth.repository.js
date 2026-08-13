@@ -10,6 +10,7 @@ export const authRepository = {
       where: { email },
       select: {
         id: true,
+        name: true,
         email: true,
         password: true,
         role: true,
