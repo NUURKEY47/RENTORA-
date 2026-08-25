@@ -17,304 +17,382 @@ import {
   ChatBubbleLeftRightIcon,
   SparklesIcon,
   Bars3Icon,
-  XMarkIcon
+  XMarkIcon,
+  MapPinIcon,
+  PhoneIcon,
+  StarIcon,
+  WrenchScrewdriverIcon,
+  CreditCardIcon,
+  ClipboardDocumentCheckIcon
 } from '@heroicons/react/24/outline';
 import './LandingPage.css';
 
 const PROPERTIES_DB = [
-  { id: 1, type: "Apartment", location: "Nairobi", name: "Azure Glass Villa", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000", price: 1200000 },
-  { id: 2, type: "Townhouse", location: "Mombasa", name: "Emerald Heights", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000", price: 2500000 },
-  { id: 3, type: "Studio", location: "Nairobi", name: "Sovereign Urban Loft", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1000", price: 850000 },
-  { id: 4, type: "Villa", location: "Naivasha", name: "The Ivory Estate", img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1000", price: 3200000 },
-  { id: 5, type: "Mansion", location: "Nairobi", name: "Midnight Penthouse", img: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1000", price: 5100000 },
-  { id: 6, type: "Resort", location: "Diani", name: "Emerald Bay Retreat", img: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1000", price: 2800000 }
+  { id: 1, mode: "RENT", type: "Comm", category: "Commercial Stall", location: "Eastleigh 1st Ave", name: "Amal Plaza Ground Stall G-14", img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1000", price: 45000, specs: "High Footfall • Retail" },
+  { id: 2, mode: "SALE", type: "Res", category: "Apartment", location: "Nairobi - Kileleshwa", name: "Azure Glass Luxury Penthouse", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1000", price: 35000000, specs: "3 Bed • 3 Bath • 1,950 sqft" },
+  { id: 3, mode: "RENT", type: "Comm", category: "Office Space", location: "Nairobi - Westlands", name: "Modern Commercial Office Suite", img: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000", price: 120000, specs: "5,000 sqft • Prime Location" },
+  { id: 4, mode: "RENT", type: "Comm", category: "Retail Shop", location: "Eastleigh Jam Street", name: "High Street Retail Shop", img: "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?auto=format&fit=crop&q=80&w=1000", price: 85000, specs: "850 sqft • Busy Market Area" },
+  { id: 5, mode: "SALE", type: "Res", category: "Townhouse", location: "Mombasa - Nyali", name: "Emerald Beachfront Villa", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1000", price: 25000000, specs: "4 Bed • 4 Bath • Ocean View" },
+  { id: 6, mode: "RENT", type: "Res", category: "Apartment", location: "Nairobi - Parklands", name: "Sovereign Urban Executive Loft", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1000", price: 65000, specs: "2 Bed • 2 Bath • Balcony" }
 ];
 
 export default function LandingPage() {
-  const [showCount, setShowCount] = useState(3);
-  const [filters, setFilters] = useState({ location: '', type: '', maxPrice: '' });
+  const [activeTab, setActiveTab] = useState('RENT'); // 'RENT' | 'SALE'
+  const [showCount, setShowCount] = useState(6);
+  const [filters, setFilters] = useState({ location: '', category: '', maxPrice: '' });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const filteredProperties = useMemo(() => {
     return PROPERTIES_DB.filter(p => {
+      const matchMode = p.mode === activeTab;
       const matchLoc = !filters.location || p.location.toLowerCase().includes(filters.location.toLowerCase());
-      const matchType = !filters.type || p.type.toLowerCase().includes(filters.type.toLowerCase());
+      const matchCat = !filters.category || p.category.toLowerCase().includes(filters.category.toLowerCase());
       const matchPrice = !filters.maxPrice || p.price <= parseInt(filters.maxPrice);
-      return matchLoc && matchType && matchPrice;
+      return matchMode && matchLoc && matchCat && matchPrice;
     });
-  }, [filters]);
+  }, [activeTab, filters]);
 
   return (
     <div className="landing-container">
-      {/* Navigation */}
+      {/* 1. Header Navigation */}
       <nav className="nav-sovereign">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ background: '#0a6630', padding: '6px', borderRadius: '8px' }}>
-            <BuildingOfficeIcon className="h-6 w-6 text-white" />
+          <div style={{ 
+            background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', 
+            padding: '8px', 
+            borderRadius: '12px',
+            boxShadow: '0 4px 14px rgba(99, 102, 241, 0.35)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L3 8V20C3 20.5523 3.44772 21 4 21H20C20.5523 21 21 20.5523 21 20V8L12 2Z" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+              <circle cx="12" cy="10.5" r="2.5" stroke="white" strokeWidth="2" />
+              <path d="M10.5 13L9.5 17.5H14.5L13.5 13" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+            </svg>
           </div>
-          <span style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.5px' }}>Rentora</span>
+          <span style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.5px', color: '#0f172a' }}>
+            Rentora<span style={{ color: '#6366f1' }}>.</span>
+          </span>
         </div>
 
-        {/* Mobile Toggle */}
-        <div 
-          className="nav-mobile-toggle" 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? (
-            <XMarkIcon className="h-8 w-8 text-slate-800" />
-          ) : (
-            <Bars3Icon className="h-8 w-8 text-slate-800" />
-          )}
-        </div>
-
+        {/* Desktop Nav Links */}
         <div className="nav-links">
-          <div className="nav-item-container">
-            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              Solutions <ChevronDownIcon className="h-4 w-4" />
-            </a>
-            <div className="dropdown-sovereign">
-              <a href="#" className="dropdown-link">
-                <HomeModernIcon className="h-5 w-5 text-emerald-600" />
-                <span>For Individual Landlords</span>
-              </a>
-              <a href="#" className="dropdown-link">
-                <GlobeAltIcon className="h-5 w-5 text-emerald-600" />
-                <span>Enterprise Property Groups</span>
-              </a>
-              <a href="#" className="dropdown-link">
-                <ShieldCheckIcon className="h-5 w-5 text-emerald-600" />
-                <span>Regulatory Compliance</span>
-              </a>
-            </div>
-          </div>
-          <a href="#marketplace">Marketplace</a>
-          <a href="#pricing">Pricing</a>
+          <a href="#" className="nav-active">Home</a>
+          <a href="#marketplace">Buy</a>
+          <a href="#marketplace">Rent</a>
+          <a href="#marketplace">Sell</a>
+          <a href="#marketplace">Commercial</a>
+          <a href="#features">Solutions</a>
         </div>
 
         <div className="nav-actions">
-          <Link to="/login" style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a', textDecoration: 'none' }}>Log in</Link>
-          <a href="#presentation" className="btn-outline">Presentation</a>
-          <Link to="/register" className="btn-filled">Registry</Link>
+          <Link to="/login" style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a', textDecoration: 'none' }}>Sign In</Link>
+          <Link to="/register" className="btn-filled" style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)' }}>Register</Link>
+        </div>
+
+        {/* Mobile Toggle */}
+        <div className="nav-mobile-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          {isMobileMenuOpen ? <XMarkIcon className="h-8 w-8 text-slate-800" /> : <Bars3Icon className="h-8 w-8 text-slate-800" />}
         </div>
 
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
           <div className="nav-mobile-menu">
-            <a href="#marketplace" onClick={() => setIsMobileMenuOpen(false)}>Marketplace</a>
-            <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)}>Pricing</a>
-            <a href="#presentation" onClick={() => setIsMobileMenuOpen(false)}>Presentation</a>
+            <a href="#marketplace" onClick={() => setIsMobileMenuOpen(false)}>Properties</a>
+            <a href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)}>How It Works</a>
+            <a href="#features" onClick={() => setIsMobileMenuOpen(false)}>Features</a>
+            <a href="#testimonials" onClick={() => setIsMobileMenuOpen(false)}>Success Stories</a>
             <div style={{ borderTop: '1px solid #f1f5f9', margin: '10px 0' }}></div>
-            <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>Log in</Link>
-            <Link to="/register" style={{ color: '#0a6630' }} onClick={() => setIsMobileMenuOpen(false)}>Create Account</Link>
+            <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>Sign In</Link>
+            <Link to="/register" style={{ color: '#4f46e5', fontWeight: 700 }} onClick={() => setIsMobileMenuOpen(false)}>Register Account</Link>
           </div>
         )}
       </nav>
 
-      {/* Hero Section */}
+      {/* 2. Skyline Search Hero Banner */}
       <header className="hero-sovereign">
-        <div className="hero-badge">Engineered for Maximum Yield</div>
-        <h1>The Sovereign <br /> Real Estate OS.</h1>
-        <p>Intelligent Software for Elite Landlords & Managers. Reimagining operations with radically simplified, bank-grade infrastructure.</p>
-        <div className="hero-buttons" style={{ display: 'flex', gap: '16px' }}>
-          <Link to="/register" className="btn-filled" style={{ padding: '16px 40px', fontSize: '16px' }}>Setup Account</Link>
-          <a href="#marketplace" className="btn-outline" style={{ background: 'white', padding: '16px 40px', fontSize: '16px' }}>View Marketplace</a>
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <h1>Find Your Perfect Space with Rentora.<br />Property Management Made Simple.</h1>
+          <p>The #1 Real Estate & Commercial Plaza Platform in Nairobi. Manage plaza stalls, commercial shops & residential properties seamlessly.</p>
+
+          {/* Search Filter Box */}
+          <div className="search-box-master">
+            {/* Rent / Sale Tabs */}
+            <div className="tab-group-master">
+              <button 
+                className={`tab-btn ${activeTab === 'RENT' ? 'active' : ''}`}
+                onClick={() => setActiveTab('RENT')}
+              >
+                For Rent
+              </button>
+              <button 
+                className={`tab-btn ${activeTab === 'SALE' ? 'active' : ''}`}
+                onClick={() => setActiveTab('SALE')}
+              >
+                For Sale
+              </button>
+            </div>
+
+            {/* Filter Inputs Grid */}
+            <div className="filter-grid-master">
+              <div className="filter-item">
+                <label>LOCATION</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. Eastleigh 1st Ave, Westlands..." 
+                  value={filters.location}
+                  onChange={(e) => setFilters({...filters, location: e.target.value})}
+                />
+              </div>
+
+              <div className="filter-item">
+                <label>PROPERTY TYPE</label>
+                <select 
+                  value={filters.category}
+                  onChange={(e) => setFilters({...filters, category: e.target.value})}
+                >
+                  <option value="">All Categories</option>
+                  <option value="Commercial Stall">Commercial Stall / Plaza</option>
+                  <option value="Retail Shop">Retail Shop</option>
+                  <option value="Office Space">Office Space</option>
+                  <option value="Apartment">Residential Apartment</option>
+                  <option value="Townhouse">Townhouse / Villa</option>
+                </select>
+              </div>
+
+              <div className="filter-item">
+                <label>MAX PRICE (KES)</label>
+                <input 
+                  type="number" 
+                  placeholder="Any Budget" 
+                  value={filters.maxPrice}
+                  onChange={(e) => setFilters({...filters, maxPrice: e.target.value})}
+                />
+              </div>
+
+              <button className="btn-search-master">
+                <MagnifyingGlassIcon className="h-5 w-5" /> SEARCH PROPERTIES
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* Marketplace Search */}
+      {/* 3. Featured Properties & Plaza Stalls Grid */}
       <section id="marketplace" className="marketplace-section">
-        <div className="search-bar-elite">
-          <div className="search-field">
-            <label>LOCATION</label>
-            <input 
-              type="text" 
-              placeholder="Search City..." 
-              value={filters.location}
-              onChange={(e) => setFilters({...filters, location: e.target.value})}
-            />
-          </div>
-          <div className="search-field">
-            <label>MAX PRICE ($)</label>
-            <input 
-              type="number" 
-              placeholder="Any Price" 
-              value={filters.maxPrice}
-              onChange={(e) => setFilters({...filters, maxPrice: e.target.value})}
-            />
-          </div>
-          <div className="search-field">
-            <label>PROPERTY TYPE</label>
-            <select 
-              value={filters.type}
-              onChange={(e) => setFilters({...filters, type: e.target.value})}
-              style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '16px', fontWeight: 600 }}
-            >
-              <option value="">All Types</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Villa">Villa</option>
-              <option value="Studio">Studio</option>
-              <option value="Townhouse">Townhouse</option>
-            </select>
-          </div>
-          <button style={{ background: '#0a6630', color: 'white', padding: '0 40px', borderRadius: '100px', border: 'none', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <MagnifyingGlassIcon className="h-5 w-5" /> Filter
-          </button>
-        </div>
-
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '42px', fontWeight: 800 }}>Discover Premium Rentals</h2>
-          <p style={{ color: '#64748b' }}>Browse verified listings directly from elite property managers using Rentora OS.</p>
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+          <h2 style={{ fontSize: '36px', fontWeight: 800, color: '#0f172a' }}>Featured Listings</h2>
+          <p style={{ color: '#64748b', fontSize: '16px' }}>Explore top commercial plaza stalls, retail shops, and residential apartments.</p>
         </div>
 
         <div className="property-grid">
           {filteredProperties.slice(0, showCount).map((p) => (
-            <div key={p.id} className="property-card">
-              <img src={p.img} alt={p.name} className="property-img" />
-              <div className="property-overlay">
-                <span className="property-type">{p.type} — {p.location}</span>
-                <h3 style={{ fontSize: '24px', fontWeight: 800, marginTop: '12px' }}>{p.name}</h3>
-                <p style={{ opacity: 0.8, fontSize: '14px' }}>${p.price.toLocaleString()}</p>
+            <div key={p.id} className="card-master">
+              <div className="card-image-wrapper">
+                <img src={p.img} alt={p.name} className="card-image" />
+                <div className="badge-price">KES {p.price.toLocaleString()}{p.mode === 'RENT' ? '/mo' : ''}</div>
+                <div className="badge-type">{p.type}</div>
+                <div className={`badge-mode ${p.mode === 'RENT' ? 'mode-rent' : 'mode-sale'}`}>{p.mode}</div>
+              </div>
+              <div className="card-body">
+                <h3 className="card-title">{p.name}</h3>
+                <p className="card-location"><MapPinIcon className="h-4 w-4 inline mr-1 text-indigo-600" /> {p.location}</p>
+                <p className="card-specs">{p.specs}</p>
+                <Link to="/register" className="btn-view-details">VIEW DETAILS</Link>
               </div>
             </div>
           ))}
           {filteredProperties.length === 0 && (
-            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '100px', background: '#f8fafc', borderRadius: '32px' }}>
-              <p style={{ fontSize: '18px', fontWeight: 600, color: '#64748b' }}>No properties found matching your search.</p>
+            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '80px', background: '#f8fafc', borderRadius: '24px' }}>
+              <p style={{ fontSize: '18px', fontWeight: 600, color: '#64748b' }}>No listings match your search criteria for {activeTab}.</p>
             </div>
           )}
         </div>
-
-        {showCount < filteredProperties.length && (
-          <div style={{ textAlign: 'center', marginTop: '60px' }}>
-            <button 
-              onClick={() => setShowCount(filteredProperties.length)}
-              style={{ background: 'transparent', border: '2px solid #e2e8f0', padding: '12px 32px', borderRadius: '12px', fontWeight: 700, cursor: 'pointer' }}
-            >
-              Show more properties
-            </button>
-          </div>
-        )}
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" style={{ padding: '100px 10%', background: '#f8fafc' }}>
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-          <h2 style={{ fontSize: '42px', fontWeight: 800 }}>Predictable, Tiered Pricing</h2>
-          <p style={{ color: '#64748b' }}>Choose the OS that fits your portfolio scale.</p>
+      {/* 4. Trusted Partners & Payment Integrations Banner */}
+      <section className="partners-banner">
+        <p className="partners-title">TRUSTED PAYMENT INTEGRATIONS & BANKING PARTNERS</p>
+        <div className="partners-logos">
+          <div className="partner-chip mp-chip">💚 M-PESA Daraja API</div>
+          <div className="partner-chip">KCB Bank</div>
+          <div className="partner-chip">Equity Bank</div>
+          <div className="partner-chip">ABSA Bank</div>
+          <div className="partner-chip">Co-op Bank</div>
+          <div className="partner-chip">Stanbic Bank</div>
+        </div>
+      </section>
+
+      {/* 5. How Rentora Works (3 Steps) */}
+      <section id="how-it-works" className="how-it-works-section">
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+          <span style={{ color: '#4f46e5', fontWeight: 700, fontSize: '14px', letterSpacing: '1px' }}>3 SIMPLE STEPS</span>
+          <h2 style={{ fontSize: '36px', fontWeight: 800, color: '#0f172a', marginTop: '8px' }}>How Rentora Works</h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
-          <div className="pricing-card">
-            <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#64748b', letterSpacing: '1px' }}>STARTER</h3>
-            <div style={{ fontSize: '48px', fontWeight: 800, margin: '20px 0' }}>$49<span style={{ fontSize: '16px', color: '#94a3b8' }}>/mo</span></div>
-            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '32px' }}>For landlords with up to 10 units.</p>
-            <ul style={{ listStyle: 'none', padding: 0, marginBottom: '40px', flex: 1 }}>
-              <li style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> Automate Rent Collection</li>
-              <li style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> 1 Landlord Account</li>
-              <li style={{ display: 'flex', gap: '12px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> Basic Marketplace Listing</li>
-            </ul>
-            <Link to="/register" className="btn-outline" style={{ textAlign: 'center' }}>Choose Starter</Link>
+        <div className="steps-grid">
+          <div className="step-card">
+            <div className="step-icon-bg"><ClipboardDocumentCheckIcon className="h-8 w-8 text-indigo-600" /></div>
+            <h3>1. Register & List</h3>
+            <p>Create your account, input plaza building details, floor stall maps, or residential units with pricing and media.</p>
           </div>
 
-          <div className="pricing-card featured">
-            <div style={{ position: 'absolute', top: '-15px', right: '30px', background: 'var(--primary)', color: 'white', padding: '4px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: 700 }}>MOST POPULAR</div>
-            <h3 style={{ fontSize: '14px', fontWeight: 800, color: 'var(--primary)', letterSpacing: '1px' }}>PROFESSIONAL</h3>
-            <div style={{ fontSize: '48px', fontWeight: 800, margin: '20px 0' }}>$199<span style={{ fontSize: '16px', color: '#94a3b8' }}>/mo</span></div>
-            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '32px' }}>Unlimited units for active managers.</p>
-            <ul style={{ listStyle: 'none', padding: 0, marginBottom: '40px', flex: 1 }}>
-              <li style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> Digital Lease Execution</li>
-              <li style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> Sub-Admin Management</li>
-              <li style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> Verified Tenant Screening</li>
-              <li style={{ display: 'flex', gap: '12px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> Priority Support</li>
-            </ul>
-            <Link to="/register" className="btn-filled" style={{ textAlign: 'center' }}>Go Pro</Link>
+          <div className="step-card">
+            <div className="step-icon-bg"><CreditCardIcon className="h-8 w-8 text-emerald-600" /></div>
+            <h3>2. Manage & Market</h3>
+            <p>Automate M-Pesa rent prompts, track caretaker reports, and market vacant stalls directly to prospective shopkeepers.</p>
           </div>
 
-          <div className="pricing-card">
-            <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#64748b', letterSpacing: '1px' }}>ENTERPRISE</h3>
-            <div style={{ fontSize: '48px', fontWeight: 800, margin: '20px 0' }}>Custom</div>
-            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '32px' }}>Custom infrastructure for massive groups.</p>
-            <ul style={{ listStyle: 'none', padding: 0, marginBottom: '40px', flex: 1 }}>
-              <li style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> White-label Marketplace</li>
-              <li style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> Bank-grade API Access</li>
-              <li style={{ display: 'flex', gap: '12px' }}><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> Dedicated Account Manager</li>
-            </ul>
-            <a href="#presentation" className="btn-outline" style={{ textAlign: 'center' }}>Contact Sales</a>
+          <div className="step-card">
+            <div className="step-icon-bg"><BanknotesIcon className="h-8 w-8 text-amber-600" /></div>
+            <h3>3. Close Deals & Collect</h3>
+            <p>Receive instant M-Pesa notifications, issue automated digital receipts, and generate 1-click monthly financial statements.</p>
           </div>
         </div>
       </section>
 
-      {/* Presentation Section (FormSubmit) */}
-      <section id="presentation" className="demo-section">
-        <div className="presentation-grid">
-          <div>
-            <h2 style={{ fontSize: '48px', fontWeight: 800, marginBottom: '40px' }}>Request a Presentation</h2>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              <li style={{ display: 'flex', gap: '20px', marginBottom: '32px' }}><CheckCircleIcon className="h-7 w-7 text-emerald-500" /> Full tour of the automation engine</li>
-              <li style={{ display: 'flex', gap: '20px', marginBottom: '32px' }}><CheckCircleIcon className="h-7 w-7 text-emerald-500" /> Custom ROI calculation for your portfolio</li>
-              <li style={{ display: 'flex', gap: '20px' }}><CheckCircleIcon className="h-7 w-7 text-emerald-500" /> Data migration strategy session</li>
-            </ul>
-            <div style={{ marginTop: '60px', padding: '24px', background: '#f8fafc', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <EnvelopeIcon className="h-6 w-6 text-emerald-600" />
+      {/* 6. Comprehensive Plaza & Property Management Features */}
+      <section id="features" className="features-section">
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h2 style={{ fontSize: '36px', fontWeight: 800, color: '#0f172a' }}>Comprehensive Plaza & Property Features</h2>
+          <p style={{ color: '#64748b' }}>Everything you need to run commercial shopping plazas and residential estates.</p>
+        </div>
+
+        <div className="features-grid">
+          <div className="feature-item">
+            <DocumentTextIcon className="h-7 w-7 text-indigo-600" />
+            <h4>Lease Management</h4>
+            <p>Digital tenancy agreements and lease expiry tracking.</p>
+          </div>
+          <div className="feature-item">
+            <UserGroupIcon className="h-7 w-7 text-emerald-600" />
+            <h4>Tenant & Trader Portal</h4>
+            <p>Self-service dashboard for rent payment & receipt history.</p>
+          </div>
+          <div className="feature-item">
+            <ChartBarIcon className="h-7 w-7 text-blue-600" />
+            <h4>Financial Reporting</h4>
+            <p>1-click revenue breakdown, overdue rent, & caretaker audits.</p>
+          </div>
+          <div className="feature-item">
+            <WrenchScrewdriverIcon className="h-7 w-7 text-amber-600" />
+            <h4>Maintenance Requests</h4>
+            <p>Track plumbing, electrical, and stall repair tickets.</p>
+          </div>
+          <div className="feature-item">
+            <SparklesIcon className="h-7 w-7 text-purple-600" />
+            <h4>Analytics Dashboard</h4>
+            <p>Real-time occupancy rates and revenue performance.</p>
+          </div>
+          <div className="feature-item">
+            <BanknotesIcon className="h-7 w-7 text-emerald-600" />
+            <h4>M-Pesa Rent Collection</h4>
+            <p>Automated STK Push prompts and instant receipt verification.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Success Stories (Testimonials) */}
+      <section className="testimonials-section">
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+          <span style={{ color: '#4f46e5', fontWeight: 700, fontSize: '14px', letterSpacing: '1px' }}>TESTIMONIALS</span>
+          <h2 style={{ fontSize: '36px', fontWeight: 800, color: '#0f172a', marginTop: '8px' }}>Hear From Our Success Stories</h2>
+        </div>
+
+        <div className="testimonials-grid">
+          <div className="testimonial-card">
+            <div className="stars-row"><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /></div>
+            <p className="testimonial-text">"Rentora has made managing our 180 plaza stalls in Eastleigh completely effortless. Automated M-Pesa collections eliminated fake SMS receipts entirely!"</p>
+            <div className="testimonial-author">
+              <div className="author-avatar">N</div>
               <div>
-                <p style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8' }}>DIRECT CONTACT</p>
-                <a href="mailto:yessnoor143@gmail.com" style={{ fontSize: '18px', fontWeight: 800, color: '#0a6630', textDecoration: 'none' }}>yessnoor143@gmail.com</a>
+                <h5>Nuurkey A.</h5>
+                <p>Plaza Property Manager, Nairobi</p>
               </div>
             </div>
           </div>
 
-          <div className="demo-form-card">
-            <form action="https://formsubmit.co/yessnoor143@gmail.com" method="POST">
-              {/* FormSubmit Configuration */}
-              <input type="hidden" name="_next" value="https://rentora.cc" />
-              <input type="hidden" name="_subject" value="New Presentation Request from Landing Page" />
-              <input type="hidden" name="_template" value="table" />
+          <div className="testimonial-card">
+            <div className="stars-row"><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /></div>
+            <p className="testimonial-text">"The floor-by-floor stall matrix gives me complete clarity on which shops are paid, overdue, or vacant right from my phone."</p>
+            <div className="testimonial-author">
+              <div className="author-avatar">D</div>
+              <div>
+                <h5>David O.</h5>
+                <p>Commercial Real Estate Agent</p>
+              </div>
+            </div>
+          </div>
 
-              <div className="form-name-row">
-                <div className="input-group"><label>First Name</label><input name="First_Name" type="text" placeholder="Jane" required /></div>
-                <div className="input-group"><label>Last Name</label><input name="Last_Name" type="text" placeholder="Doe" required /></div>
+          <div className="testimonial-card">
+            <div className="stars-row"><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /><StarIcon className="h-5 w-5 fill-amber-400 text-amber-400" /></div>
+            <p className="testimonial-text">"Easily the best property management software in Kenya. Financial reporting takes seconds at the end of every month."</p>
+            <div className="testimonial-author">
+              <div className="author-avatar">M</div>
+              <div>
+                <h5>Mary K.</h5>
+                <p>Residential Estate Director</p>
               </div>
-              <div className="input-group"><label>Email Address</label><input name="Email" type="email" placeholder="jane@example.com" required /></div>
-              <div className="input-group"><label>Phone Number</label><input name="Phone" type="tel" placeholder="+254..." required /></div>
-              <div className="input-group">
-                <label>Portfolio Size</label>
-                <select name="Portfolio_Size">
-                  <option>1-50 Units</option>
-                  <option>51-200 Units</option>
-                  <option>201+ Units</option>
-                </select>
-              </div>
-              <button type="submit" className="btn-filled" style={{ width: '100%', padding: '18px', fontSize: '16px' }}>Send Request</button>
-            </form>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Compact Horizontal Footer */}
+      {/* 8. Rentora Footer */}
       <footer className="footer-sovereign">
-        <div className="footer-grid">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ background: '#0a6630', padding: '6px', borderRadius: '8px' }}><BuildingOfficeIcon className="h-6 w-6 text-white" /></div>
-            <span style={{ fontSize: '20px', fontWeight: 800 }}>Rentora</span>
+        <div className="footer-content-grid">
+          <div className="footer-brand">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+              <div style={{ 
+                background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', 
+                padding: '6px', 
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L3 8V20C3 20.5523 3.44772 21 4 21H20C20.5523 21 21 20.5523 21 20V8L12 2Z" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+                  <circle cx="12" cy="10.5" r="2.5" stroke="white" strokeWidth="2" />
+                  <path d="M10.5 13L9.5 17.5H14.5L13.5 13" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <span style={{ fontSize: '20px', fontWeight: 800 }}>Rentora<span style={{ color: '#6366f1' }}>.</span></span>
+            </div>
+            <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>Modern Property Management & Commercial Plaza Platform in Kenya.</p>
           </div>
 
-          <div className="footer-col">
+          <div className="footer-links-group">
+            <h5>Sitemap</h5>
             <ul>
-              <li><a href="#marketplace">Marketplace</a></li>
-              <li><a href="#pricing">Pricing</a></li>
-              <li><a href="#presentation">Presentation</a></li>
+              <li><a href="#marketplace">Properties</a></li>
+              <li><a href="#how-it-works">How It Works</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><Link to="/login">Sign In</Link></li>
+            </ul>
+          </div>
+
+          <div className="footer-links-group">
+            <h5>Legal & Support</h5>
+            <ul>
+              <li><Link to="/privacy">Privacy Policy</Link></li>
+              <li><Link to="/terms">Terms of Service</Link></li>
               <li><a href="mailto:yessnoor143@gmail.com">Support</a></li>
             </ul>
           </div>
 
-          <div style={{ display: 'flex', gap: '16px' }}>
-            <a href="#" style={{ color: '#94a3b8' }}><GlobeAltIcon className="h-5 w-5" /></a>
-            <a href="#" style={{ color: '#94a3b8' }}><ChatBubbleLeftRightIcon className="h-5 w-5" /></a>
+          <div className="footer-links-group">
+            <h5>Contact Info</h5>
+            <p style={{ color: '#94a3b8', fontSize: '14px' }}>Nairobi, Kenya</p>
+            <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '8px' }}>yessnoor143@gmail.com</p>
           </div>
         </div>
         
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '30px', textAlign: 'center', color: '#64748b', fontSize: '12px' }}>
-          © 2024 Rentora Technologies Inc. Built for the future of real estate.
+        <div className="footer-bottom">
+          © 2026 Rentora Platform. Built for the future of commercial & residential real estate.
         </div>
       </footer>
     </div>

@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 export const authService = {
   registry: async (data, currentUser) => {
     // If the person creating this user has an ID (i.e. is an Admin making a sub-admin/landlord), link them
+    console.log(currentUser)
     if (currentUser && currentUser.id) {
       data.managedById = currentUser.id;
     }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getLandlords } from "../../api/landlordService";
 import { assignLandlord } from "../../api/propertyService";
-import { XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, UserIcon, BuildingOfficeIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 
 export default function AssignLandlordModal({ property, onClose, onSuccess }) {
@@ -43,44 +43,51 @@ export default function AssignLandlordModal({ property, onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
-        <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="text-lg font-bold text-gray-900">Assign Landlord</h3>
-          <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full transition">
-            <XMarkIcon className="h-5 w-5 text-gray-500" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden border border-slate-200">
+        {/* Header */}
+        <div className="bg-slate-900 px-6 py-4 flex items-center justify-between shrink-0 text-white">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+              <BuildingOfficeIcon className="h-5 w-5 text-white" />
+            </div>
+            <h3 className="text-lg font-extrabold tracking-tight">Assign Landlord / Agent</h3>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-slate-800">
+            <XMarkIcon className="h-6 w-6" />
           </button>
         </div>
 
-        <div className="p-6">
-          <p className="text-sm text-gray-500 mb-6">
-            Assigning a landlord to <span className="font-bold text-gray-900">{property.name}</span> will grant them full management rights over this property.
+        {/* Modal Body - Scrollable */}
+        <div className="p-6 space-y-4 overflow-y-auto flex-1">
+          <p className="text-xs text-slate-500 font-medium leading-relaxed">
+            Assigning a landlord/agent to <span className="font-bold text-slate-900">{property.name}</span> grants them full management access over this property.
           </p>
 
-          <div className="space-y-4">
-            <label className="block text-sm font-semibold text-gray-700">Select Landlord</label>
+          <div className="space-y-3">
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Select Landlord</label>
             {loading ? (
-              <div className="py-4 text-center text-gray-400">Loading landlords...</div>
+              <div className="py-6 text-center text-xs font-bold text-slate-400">Loading landlords...</div>
             ) : (
-              <div className="grid gap-2 max-h-60 overflow-y-auto pr-2">
+              <div className="grid gap-2 max-h-60 overflow-y-auto pr-1">
                 {landlords.map((l) => (
                   <button
                     key={l.id}
                     onClick={() => setSelectedLandlord(l.id)}
-                    className={`flex items-center p-4 border rounded-xl transition text-left ${
+                    className={`flex items-center p-3.5 border rounded-xl transition text-left ${
                       selectedLandlord === l.id 
-                        ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-100' 
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-indigo-600 bg-indigo-50/50 ring-2 ring-indigo-100' 
+                        : 'border-slate-200 hover:border-slate-300 bg-slate-50'
                     }`}
                   >
-                    <div className={`h-10 w-10 rounded-full flex items-center justify-center mr-4 ${
-                      selectedLandlord === l.id ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'
+                    <div className={`h-9 w-9 rounded-xl flex items-center justify-center mr-3 shrink-0 ${
+                      selectedLandlord === l.id ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500'
                     }`}>
-                      <UserIcon className="h-6 w-6" />
+                      <UserIcon className="h-5 w-5" />
                     </div>
-                    <div>
-                      <div className="font-bold text-gray-900">{l.name}</div>
-                      <div className="text-xs text-gray-500">{l.email}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-bold text-slate-900 text-sm truncate">{l.name}</div>
+                      <div className="text-xs text-slate-500 truncate">{l.email}</div>
                     </div>
                   </button>
                 ))}
@@ -89,17 +96,20 @@ export default function AssignLandlordModal({ property, onClose, onSuccess }) {
           </div>
         </div>
 
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex gap-3">
+        {/* Sticky Actions Footer */}
+        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex gap-3 shrink-0">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-200 rounded-xl transition"
+            className="flex-1 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl transition uppercase tracking-wider"
           >
             Cancel
           </button>
           <button
             onClick={handleAssign}
-            disabled={submitting || !selectedLandlord}
-            className="flex-1 py-2.5 text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition shadow-lg shadow-blue-200 disabled:opacity-50"
+            disabled={submitting}
+            className={`flex-1 py-2.5 bg-indigo-600 text-white font-bold text-xs rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/25 uppercase tracking-wider ${
+              submitting ? "opacity-75 cursor-not-allowed" : ""
+            }`}
           >
             {submitting ? "Assigning..." : "Confirm Assignment"}
           </button>

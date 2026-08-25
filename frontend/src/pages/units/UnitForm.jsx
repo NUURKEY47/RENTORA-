@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { createUnit, updateUnit } from "../../api/unitService";
 import { getAllProperties } from "../../api/propertyService";
 import toast from "react-hot-toast";
+import { HomeIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function UnitForm({ unit, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
@@ -71,115 +72,153 @@ export default function UnitForm({ unit, onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all scale-100">
-        <div className="bg-blue-600 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white">
-            {unit ? "Edit Unit" : "Add New Unit"}
-          </h2>
-          <button onClick={onClose} className="text-white hover:text-gray-200 transition text-2xl focus:outline-none">
-            ×
+    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden border border-slate-200">
+        {/* Header */}
+        <div className="bg-slate-900 px-6 py-4 flex items-center justify-between shrink-0 text-white">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+              <HomeIcon className="h-5 w-5 text-white" />
+            </div>
+            <h2 className="text-lg font-extrabold tracking-tight">
+              {unit ? "Edit Unit / Stall" : "Add Unit / Stall"}
+            </h2>
+          </div>
+          <button 
+            onClick={onClose} 
+            className="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-slate-800"
+          >
+            <XMarkIcon className="h-6 w-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          <div className="grid grid-cols-2 gap-4">
+        {/* Form Body - Scrollable */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Unit Name</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Unit / Stall Code
+              </label>
               <input
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
-                placeholder="e.g. A101"
+                placeholder="e.g. Stall G-14 or Apt 101"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
                 required
               />
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Monthly Price</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Monthly Price (KES)
+              </label>
               <input
-                name="price"
                 type="number"
+                name="price"
                 value={formData.price}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
-                placeholder="2000"
+                placeholder="e.g. 45000"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
                 required
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Size/Type</label>
-              <input
-                name="size"
-                value={formData.size}
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Property / Plaza
+              </label>
+              <select
+                name="propertyId"
+                value={formData.propertyId}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
-                placeholder="e.g. 2 Bedroom"
-              />
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
+                required
+              >
+                <option value="">Select Property</option>
+                {properties.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} ({p.location})
+                  </option>
+                ))}
+              </select>
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Status
+              </label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none appearance-none"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
               >
-                <option value="available">Available</option>
+                <option value="available">Available / Vacant</option>
                 <option value="occupied">Occupied</option>
-                <option value="maintenance">Maintenance</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Property</label>
-            <select
-              name="propertyId"
-              value={formData.propertyId}
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Size / Dimensions (Optional)
+            </label>
+            <input
+              name="size"
+              value={formData.size}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none appearance-none"
-              required
-            >
-              <option value="">Select a Property</option>
-              {properties.map((p) => (
-                <option key={p.id} value={p.id}>{p.name} ({p.location})</option>
-              ))}
-            </select>
+              placeholder="e.g. 650 sqft or Ground Floor Retail"
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Unit Photo URL</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Image URL (Optional)
+            </label>
             <input
               name="image1"
               value={formData.image1}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
-              placeholder="https://example.com/photo.jpg"
+              placeholder="https://images.unsplash.com/..."
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Description (Optional)
+            </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
+              placeholder="Stall or apartment details..."
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
               rows={2}
-              placeholder="Brief description of the unit's features..."
             />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-            <button type="button" onClick={onClose} className="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition font-medium">
+          {/* Sticky Bottom Actions */}
+          <div className="flex justify-end space-x-3 pt-4 border-t border-slate-100 shrink-0">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-slate-700 hover:bg-slate-50 font-bold text-xs uppercase tracking-wider transition"
+            >
               Cancel
             </button>
-            <button type="submit" disabled={loading} className={`px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-bold shadow-lg shadow-blue-100 ${loading ? "opacity-70 cursor-not-allowed" : ""}`}>
-              {loading ? "Saving..." : unit ? "Update Unit" : "Create Unit"}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/25 ${
+                loading ? "opacity-75 cursor-not-allowed" : ""
+              }`}
+            >
+              {loading ? "Processing..." : unit ? "Update Unit" : "Create Unit"}
             </button>
           </div>
         </form>

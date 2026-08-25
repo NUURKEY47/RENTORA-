@@ -3,6 +3,7 @@ import { createProperty, updateProperty, getCategories } from "../../api/propert
 import { getLandlords } from "../../api/landlordService";
 import { AuthContext } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
+import { BuildingOfficeIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function PropertyForm({ property, onClose, onSuccess }) {
   const { role } = useContext(AuthContext);
@@ -95,48 +96,66 @@ export default function PropertyForm({ property, onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all scale-100">
-        <div className="bg-blue-600 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white">
-            {property ? "Edit Property" : "Add New Property"}
-          </h2>
-          <button onClick={onClose} className="text-white hover:text-gray-200 transition text-2xl focus:outline-none">
-            ×
+    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden border border-slate-200">
+        {/* Header */}
+        <div className="bg-slate-900 px-6 py-4 flex items-center justify-between shrink-0 text-white">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+              <BuildingOfficeIcon className="h-5 w-5 text-white" />
+            </div>
+            <h2 className="text-lg font-extrabold tracking-tight">
+              {property ? "Edit Property / Plaza" : "Add Property / Plaza"}
+            </h2>
+          </div>
+          <button 
+            onClick={onClose} 
+            className="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-slate-800"
+          >
+            <XMarkIcon className="h-6 w-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        {/* Form Body - Scrollable */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto flex-1">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Property Name</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Property / Plaza Name
+            </label>
             <input
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
+              placeholder="e.g. Amal Plaza or Azure Heights"
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
               required
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Location</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Location
+              </label>
               <input
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
+                placeholder="e.g. Eastleigh 1st Ave"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Category
+              </label>
               <select
                 name="categoryId"
                 value={formData.categoryId}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none bg-white"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
                 required
               >
                 <option value="">Select Category</option>
@@ -151,12 +170,14 @@ export default function PropertyForm({ property, onClose, onSuccess }) {
 
           {role === "ADMIN" && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Select Landlord (optional)</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Assigned Landlord / Agent (Optional)
+              </label>
               <select
                 name="landlordId"
                 value={formData.landlordId}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none bg-white font-medium"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
               >
                 <option value="">-- Unassigned --</option>
                 {landlords.map((landlord) => (
@@ -165,29 +186,39 @@ export default function PropertyForm({ property, onClose, onSuccess }) {
                   </option>
                 ))}
               </select>
-
-              <p className="text-[10px] text-gray-400 mt-1 italic uppercase tracking-wider pl-1">
-                Selected Landlord will be assigned to this property
-              </p>
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Description (optional)</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              Description (Optional)
+            </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition outline-none"
+              placeholder="Additional property details..."
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
               rows={3}
             />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-            <button type="button" onClick={onClose} className="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition font-medium">
+          {/* Sticky Bottom Actions */}
+          <div className="flex justify-end space-x-3 pt-4 border-t border-slate-100 shrink-0">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-slate-700 hover:bg-slate-50 font-bold text-xs uppercase tracking-wider transition"
+            >
               Cancel
             </button>
-            <button type="submit" disabled={loading} className={`px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-bold shadow-lg shadow-blue-100 ${loading ? "opacity-70 cursor-not-allowed" : ""}`}>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/25 ${
+                loading ? "opacity-75 cursor-not-allowed" : ""
+              }`}
+            >
               {loading ? "Processing..." : property ? "Update Property" : "Create Property"}
             </button>
           </div>

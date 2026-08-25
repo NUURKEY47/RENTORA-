@@ -18,6 +18,8 @@ import {
   CalendarIcon,
   ExclamationTriangleIcon,
   ClockIcon,
+  BanknotesIcon,
+  CreditCardIcon
 } from "@heroicons/react/24/outline";
 
 export default function Dashboard() {
@@ -53,20 +55,24 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-full min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
 
+  // --- 1. SUPER ADMIN DASHBOARD ---
   const renderAdminDashboard = () => (
-    <div className="p-8 space-y-10 bg-gray-50/30 min-h-screen">
+    <div className="p-6 sm:p-10 space-y-8 bg-slate-50 min-h-screen">
       <header className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+          <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+            System Administration
+          </span>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-2">
             Dashboard Overview
           </h1>
-          <p className="text-gray-400 font-bold text-sm mt-1 uppercase tracking-wider">
-            Real-time analytics for your real estate portfolio.
+          <p className="text-slate-500 font-medium text-sm mt-1">
+            Real-time portfolio metrics, user accounts, and financial transactions.
           </p>
         </div>
       </header>
@@ -76,300 +82,188 @@ export default function Dashboard() {
         <KpiCard
           title="Total Properties"
           value={dashboardData?.properties || 0}
-          trend={0}
-          isPositive={true}
           icon={BuildingOfficeIcon}
-          iconColor="text-blue-600 bg-blue-50"
+          iconColor="text-indigo-600 bg-indigo-50"
         />
         <KpiCard
-          title="Total Units"
+          title="Total Units / Stalls"
           value={dashboardData?.units || 0}
-          trend={0}
-          isPositive={true}
           icon={HomeIcon}
           iconColor="text-purple-600 bg-purple-50"
         />
         <KpiCard
           title="Active Landlords"
           value={dashboardData?.landlords || 0}
-          trend={0}
-          isPositive={true}
           icon={UsersIcon}
-          iconColor="text-orange-600 bg-orange-50"
+          iconColor="text-amber-600 bg-amber-50"
         />
         <KpiCard
           title="Active Tenants"
           value={dashboardData?.tenants || 0}
-          trend={0}
-          isPositive={true}
           icon={UserIcon}
-          iconColor="text-green-600 bg-green-50"
-        />
-        <KpiCard
-          title="Unassigned Portfolio"
-          value={dashboardData?.unassignedProperties || 0}
-          trend={0}
-          isPositive={false}
-          icon={ExclamationTriangleIcon}
-          iconColor="text-red-600 bg-red-50"
+          iconColor="text-emerald-600 bg-emerald-50"
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Transactions Table */}
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-gray-50 overflow-hidden lg:col-span-3">
-          <div className="p-8 border-b border-gray-50 flex justify-between items-center">
-            <h3 className="text-xl font-bold text-gray-900 tracking-tight">
-              Recent Transactions
+      {/* Recent Transactions Table */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <BanknotesIcon className="h-5 w-5 text-indigo-600" />
+            <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">
+              Recent M-Pesa & Rent Transactions
             </h3>
-            <Link
-              to="/finance"
-              className="text-xs font-bold text-blue-600 uppercase tracking-wider hover:underline transition"
-            >
-              View Ledger
-            </Link>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-gray-50/50 text-[10px] font-bold text-gray-400 uppercase tracking-wider leading-none">
-                <tr>
-                  <th className="px-8 py-5">Tenant</th>
-                  <th className="px-8 py-5">Property</th>
-                  <th className="px-8 py-5">Date</th>
-                  <th className="px-8 py-5">Amount</th>
-                  <th className="px-8 py-5 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {dashboardData?.recentTransactions?.length > 0 ? (
-                  dashboardData.recentTransactions.map((t, i) => (
-                    <tr key={i} className="hover:bg-gray-50/50 transition">
-                      <td className="px-8 py-5 flex items-center space-x-3">
-                        <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600">
-                          {t.user?.name?.charAt(0) || "U"}
-                        </div>
-                        <span className="text-sm font-bold text-gray-900">
-                          {t.user?.name || "Guest"}
-                        </span>
-                      </td>
-                      <td className="px-8 py-5 text-sm text-gray-500 font-medium">
-                        {t.invoice?.unit?.property?.name || "N/A"}
-                      </td>
-                      <td className="px-8 py-5 text-sm text-gray-400 font-bold uppercase tracking-tighter">
-                        {new Date(t.paymentDate).toLocaleDateString()}
-                      </td>
-                      <td className="px-8 py-5 text-sm font-bold text-gray-900">
-                        ${t.amount?.toLocaleString()}
-                      </td>
-                      <td className="px-8 py-5 text-right">
-                        <span
-                          className={`inline-flex px-3 py-1 text-[10px] font-bold rounded-lg uppercase tracking-wider ${
-                            t.status === "COMPLETED"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-orange-100 text-orange-700"
-                          }`}
-                        >
-                          {t.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="5"
-                      className="px-8 py-10 text-center text-sm font-bold text-gray-400 uppercase tracking-widest"
-                    >
-                      No transactions recorded yet
+          <Link
+            to="/units"
+            className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition"
+          >
+            View All Units →
+          </Link>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead className="bg-slate-50 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <tr>
+                <th className="px-6 py-4">User</th>
+                <th className="px-6 py-4">Property / Stall</th>
+                <th className="px-6 py-4">Date</th>
+                <th className="px-6 py-4">Amount</th>
+                <th className="px-6 py-4 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-sm font-medium text-slate-700">
+              {dashboardData?.recentTransactions?.length > 0 ? (
+                dashboardData.recentTransactions.map((t, i) => (
+                  <tr key={i} className="hover:bg-slate-50/80 transition">
+                    <td className="px-6 py-4 flex items-center space-x-3">
+                      <div className="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">
+                        {t.user?.name?.charAt(0) || "U"}
+                      </div>
+                      <span className="font-bold text-slate-900">{t.user?.name || "Guest User"}</span>
+                    </td>
+                    <td className="px-6 py-4 text-slate-500 font-medium">
+                      {t.invoice?.unit?.property?.name || "N/A"}
+                    </td>
+                    <td className="px-6 py-4 text-slate-400 font-semibold text-xs">
+                      {new Date(t.paymentDate).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 font-bold text-slate-900">
+                      KES {t.amount?.toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <span className={`inline-flex px-2.5 py-1 text-[10px] font-extrabold rounded-md uppercase tracking-wider ${
+                        t.status === "COMPLETED" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+                      }`}>
+                        {t.status}
+                      </span>
                     </td>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="px-6 py-10 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    No transactions recorded yet
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   );
 
+  // --- 2. LANDLORD / AGENT DASHBOARD ---
   const renderLandlordDashboard = () => (
-    <div className="p-8 space-y-10 bg-gray-50/30 min-h-screen">
+    <div className="p-6 sm:p-10 space-y-8 bg-slate-50 min-h-screen">
       <header className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+          <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+            Property & Plaza Management
+          </span>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-2">
             Dashboard Overview
           </h1>
-          <p className="text-gray-400 font-medium text-sm mt-1 uppercase tracking-wider">
-            Welcome back, here's what's happening with your portfolio today.
+          <p className="text-slate-500 font-medium text-sm mt-1">
+            Welcome back! Here's your portfolio performance today.
           </p>
         </div>
         <Link
           to="/properties"
-          className="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-blue-700 transition shadow-lg shadow-blue-100"
+          className="flex items-center justify-center px-5 py-3 bg-indigo-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/25"
         >
           <PlusIcon className="h-4 w-4 mr-2" />
-          Add Property
+          Add Property / Plaza
         </Link>
       </header>
 
       {/* KPI Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <KpiCard
-          title="Total Properties"
+          title="My Properties"
           value={dashboardData?.propertiesCount || 0}
-          trend={0}
-          isPositive={true}
           icon={BuildingOfficeIcon}
-          iconColor="text-blue-600 bg-blue-50"
+          iconColor="text-indigo-600 bg-indigo-50"
         />
         <KpiCard
-          title="Total Units"
+          title="Total Units / Stalls"
           value={dashboardData?.unitsCount || 0}
-          trend={0}
-          isPositive={true}
           icon={KeyIcon}
           iconColor="text-purple-600 bg-purple-50"
         />
         <KpiCard
           title="Active Tenants"
           value={dashboardData?.tenantsCount || 0}
-          trend={0}
-          isPositive={true}
           icon={UsersIcon}
-          iconColor="text-orange-600 bg-orange-50"
+          iconColor="text-amber-600 bg-amber-50"
         />
         <KpiCard
           title="Occupancy Rate"
           value={
             dashboardData?.unitsCount > 0
-              ? (
-                  (dashboardData.occupiedUnitsCount /
-                    dashboardData.unitsCount) *
-                  100
-                ).toFixed(1) + "%"
+              ? ((dashboardData.occupiedUnitsCount / dashboardData.unitsCount) * 100).toFixed(1) + "%"
               : "0%"
           }
-          trend={0}
-          isPositive={true}
           icon={ChartBarIcon}
-          iconColor="text-green-600 bg-green-50"
+          iconColor="text-emerald-600 bg-emerald-50"
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Pending Bookings Section */}
-        <div className="lg:col-span-2 bg-white rounded-3xl border border-gray-100 shadow-sm shadow-gray-50 overflow-hidden">
-          <div className="p-8 border-b border-gray-50 flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <DocumentChartBarIcon className="h-5 w-5 text-blue-600" />
-              <h3 className="text-lg font-bold text-gray-900 tracking-tight">
-                Pending Bookings
-              </h3>
-            </div>
-            <Link
-              to="/bookings"
-              className="text-xs font-bold text-blue-600 uppercase tracking-widest hover:underline transition"
-            >
-              View All
-            </Link>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-gray-50/50 text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">
-                <tr>
-                  <th className="px-8 py-5">Property / Unit</th>
-                  <th className="px-8 py-5">Tenant</th>
-                  <th className="px-8 py-5">Check-in</th>
-                  <th className="px-8 py-5 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {/* Cleaned up: No hardcoded rows */}
-                <tr>
-                  <td
-                    colSpan="4"
-                    className="px-8 py-10 text-center text-xs font-bold text-gray-400 uppercase tracking-widest"
-                  >
-                    No pending bookings at this time
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Recent Activity Section */}
-        <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm shadow-gray-50 flex flex-col">
-          <div className="flex items-center space-x-2 mb-8">
-            <ChartBarIcon className="h-5 w-5 text-blue-600 rotate-90" />
-            <h3 className="text-lg font-bold text-gray-900 tracking-tight">
-              Recent Activity
-            </h3>
-          </div>
-          <div className="flex-1 space-y-8 relative flex flex-col items-center justify-center">
-            <div className="absolute left-4 top-2 bottom-0 w-px bg-gray-100"></div>
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-center px-4">
-              No recent activity to display
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Featured Properties Section */}
+      {/* Featured Portfolio Properties */}
       <section>
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center space-x-2">
-            <BuildingOfficeIcon className="h-5 w-5 text-blue-600" />
-            <h3 className="text-lg font-bold text-gray-900 tracking-tight">
-              Featured Properties
-            </h3>
-          </div>
-          <Link
-            to="/properties"
-            className="text-xs font-bold text-blue-600 uppercase tracking-widest hover:underline transition"
-          >
-            View Portfolio
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+            My Featured Buildings & Plazas
+          </h3>
+          <Link to="/properties" className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition">
+            View All Properties →
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dashboardData?.properties?.length > 0 ? (
-            dashboardData.properties
-              .slice(0, 3)
-              .map((p, i) => (
-                <PropertyCard
-                  key={p.id}
-                  image={`https://images.unsplash.com/photo-${i === 0 ? "1545324418-cc1a3fa10c00" : i === 1 ? "1605276374104-dee2a0ed3cd6" : "1512917774080-9991f1c4c750"}?auto=format&fit=crop&w=800&q=80`}
-                  title={p.name}
-                  location={p.location}
-                  units={p.units?.length || 0}
-                  occupancy={
-                    p.units?.length > 0
-                      ? Math.floor(
-                          (p.units.filter((u) => u.tenants?.length > 0).length /
-                            p.units.length) *
-                            100,
-                        )
-                      : 0
-                  }
-                  status={
-                    p.units?.length > 0 &&
-                    p.units.every((u) => u.tenants?.length > 0)
-                      ? "FULL"
-                      : "VACANCIES"
-                  }
-                />
-              ))
+            dashboardData.properties.slice(0, 3).map((p, i) => (
+              <PropertyCard
+                key={p.id}
+                image={p.image1 || `https://images.unsplash.com/photo-${i === 0 ? "1545324418-cc1a3fa10c00" : i === 1 ? "1605276374104-dee2a0ed3cd6" : "1512917774080-9991f1c4c750"}?auto=format&fit=crop&w=800&q=80`}
+                title={p.name}
+                location={p.location}
+                units={p.units?.length || 0}
+                occupancy={
+                  p.units?.length > 0
+                    ? Math.floor((p.units.filter((u) => u.tenants?.length > 0).length / p.units.length) * 100)
+                    : 0
+                }
+                status={p.units?.length > 0 && p.units.every((u) => u.tenants?.length > 0) ? "FULL" : "VACANCIES"}
+              />
+            ))
           ) : (
-            <div className="col-span-full py-12 bg-gray-50 border-2 border-dashed border-gray-200 rounded-[32px] flex flex-col items-center justify-center text-center">
-              <BuildingOfficeIcon className="h-10 w-10 text-gray-300 mb-4" />
-              <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
-                Your portfolio is currently empty
-              </p>
-              <Link
-                to="/properties"
-                className="mt-4 text-xs font-bold text-blue-600 uppercase tracking-wide hover:underline"
-              >
-                Add your first property →
+            <div className="col-span-full py-12 bg-white border border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-center">
+              <BuildingOfficeIcon className="h-10 w-10 text-slate-300 mb-3" />
+              <p className="text-sm font-bold text-slate-400">Your portfolio is currently empty</p>
+              <Link to="/properties" className="mt-3 text-xs font-bold text-indigo-600 hover:underline">
+                + Add your first property or plaza
               </Link>
             </div>
           )}
@@ -378,168 +272,91 @@ export default function Dashboard() {
     </div>
   );
 
+  // --- 3. TENANT / SHOPKEEPER DASHBOARD ---
   const renderTenantDashboard = () => (
-    <div className="p-8 space-y-10 bg-gray-50/30 min-h-screen">
+    <div className="p-6 sm:p-10 space-y-8 bg-slate-50 min-h-screen">
       <header className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-            Welcome home, {user?.name?.split(" ")[0] || "Guest"}
+          <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+            Tenant Portal
+          </span>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-2">
+            Welcome back, {user?.name?.split(" ")[0] || "User"}!
           </h1>
-          <p className="text-gray-400 font-medium text-sm mt-1 uppercase tracking-wider">
-            Here's what's happening with your property today.
+          <p className="text-slate-500 font-medium text-sm mt-1">
+            Manage your rental unit, review rent statements, and pay via M-Pesa.
           </p>
         </div>
       </header>
 
-      {/* Top Quick Stats */}
+      {/* Top Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <TenantMetricCard
-          title="Rent Status"
+          title="Rent Payment Status"
           value={
             dashboardData?.invoices?.length > 0
               ? dashboardData.invoices[0].status === "PAID"
-                ? "Paid"
-                : "Unpaid"
-              : "N/A"
+                ? "Paid 🟢"
+                : "Rent Due 🔴"
+              : "Active"
           }
           icon={CheckCircleIcon}
-          iconColor="text-green-600 bg-green-50"
+          iconColor="text-emerald-600 bg-emerald-50"
         />
         <TenantMetricCard
-          title="Active Bookings"
-          value={dashboardData?.bookingsCount || 0}
-          icon={CalendarIcon}
-          iconColor="text-blue-600 bg-blue-50"
+          title="Active Lease"
+          value={dashboardData?.unit?.name || "Assigned Unit"}
+          icon={HomeIcon}
+          iconColor="text-indigo-600 bg-indigo-50"
         />
         <TenantMetricCard
-          title="Invoices"
-          value={dashboardData?.invoicesCount || 0}
-          icon={ExclamationTriangleIcon}
-          iconColor="text-orange-600 bg-orange-50"
+          title="Monthly Billing"
+          value={dashboardData?.unit?.price ? `KES ${dashboardData.unit.price.toLocaleString()}` : "Contact Agent"}
+          icon={CreditCardIcon}
+          iconColor="text-amber-600 bg-amber-50"
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: Unit & Bookings */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Unit Details Card */}
-          <div className="bg-white rounded-[32px] overflow-hidden border border-gray-100 shadow-sm flex flex-col md:flex-row">
-            <div className="p-8 flex-1">
-              <div className="flex items-center space-x-2 mb-6 text-blue-600">
-                <BuildingOfficeIcon className="h-5 w-5" />
-                <h3 className="text-lg font-bold text-gray-900 tracking-tight">
-                  Unit Details
-                </h3>
-              </div>
-
-              {dashboardData?.unit ? (
-                <div className="space-y-4 mb-8">
-                  <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest rounded-lg">
-                    Active Lease
-                  </span>
-                  <h4 className="text-2xl font-bold text-gray-900 leading-tight">
-                    {dashboardData.unit.name},{" "}
-                    {dashboardData.unit.property?.name}
-                  </h4>
-                  <p className="text-sm font-semibold text-gray-400">
-                    {dashboardData.unit.size || "N/A"} •{" "}
-                    {dashboardData.unit.property?.location}
-                  </p>
-                </div>
-              ) : (
-                <div className="py-8">
-                  <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
-                    No active lease found
-                  </p>
-                </div>
-              )}
-
-              <div className="flex space-x-3">
-                <Link
-                  to="/units"
-                  className="px-6 py-2.5 bg-blue-600 text-white text-[10px] font-bold rounded-xl uppercase tracking-wider hover:bg-blue-700 transition shadow-lg shadow-blue-100"
-                >
-                  Browse Units
-                </Link>
-              </div>
-            </div>
-            <div className="md:w-64 h-48 md:h-auto overflow-hidden relative">
-              <img
-                src={
-                  dashboardData?.unit?.image1 ||
-                  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"
-                }
-                className="w-full h-full object-cover"
-                alt="Unit View"
-              />
-            </div>
+      {/* Unit Details & Actions */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold">
+            <BuildingOfficeIcon className="h-6 w-6" />
           </div>
-
-          {/* Active Bookings Grid */}
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2">
-              <CalendarIcon className="h-5 w-5 text-blue-600" />
-              <h3 className="text-lg font-bold text-gray-900 tracking-tight">
-                Active Bookings
-              </h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {dashboardData?.bookings?.length > 0 ? (
-                dashboardData.bookings.map((b, i) => (
-                  <BookingCard
-                    key={b.id}
-                    title={`Booking #${b.id}`}
-                    date={new Date(b.startDate).toLocaleDateString()}
-                    status={b.status}
-                    icon={ClockIcon}
-                  />
-                ))
-              ) : (
-                <div className="col-span-full py-10 bg-gray-50 border border-dashed border-gray-200 rounded-3xl flex items-center justify-center">
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-center">
-                    No active bookings
-                  </p>
-                </div>
-              )}
-            </div>
+          <div>
+            <h3 className="text-xl font-extrabold text-slate-900">My Rental Unit / Shop Details</h3>
+            <p className="text-xs font-semibold text-slate-400">Current Occupied Space</p>
           </div>
         </div>
 
-        {/* Right Column: Widgets */}
-        <div className="space-y-8">
-          {/* Upcoming Rent Widget */}
-          <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm">
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-1">
-                  Current Rent
-                </h3>
-                <p className="text-xs font-semibold text-gray-400">
-                  Monthly invoice
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold text-gray-900 leading-none">
-                  ${dashboardData?.unit?.price?.toLocaleString() || "0"}
-                </p>
-              </div>
+        {dashboardData?.unit ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
+            <div>
+              <span className="text-[10px] font-extrabold uppercase bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded">Active Tenancy</span>
+              <h4 className="text-2xl font-bold text-slate-900 mt-2">{dashboardData.unit.name}</h4>
+              <p className="text-sm font-semibold text-slate-500 mt-1">{dashboardData.unit.property?.name} • {dashboardData.unit.property?.location}</p>
+              <p className="text-xs text-slate-400 mt-2 font-medium">Monthly Rent: <strong className="text-slate-900">KES {dashboardData.unit.price?.toLocaleString()}</strong></p>
             </div>
-            <div className="space-y-4">
-              <Link
-                to="/finance"
-                className="block w-full py-3.5 text-center bg-blue-600 text-white text-[10px] font-bold rounded-xl uppercase tracking-wider hover:bg-blue-700 transition shadow-lg shadow-blue-100"
-              >
-                View Invoices
+            <div className="flex items-center justify-end">
+              <Link to="/units" className="px-6 py-3 bg-indigo-600 text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-indigo-700 transition shadow-md">
+                View Available Units
               </Link>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="py-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <p className="text-sm font-bold text-slate-400">No active unit assigned yet</p>
+            <Link to="/units" className="mt-3 inline-block text-xs font-bold text-indigo-600 hover:underline">
+              Browse Available Listed Properties →
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-slate-50 min-h-screen">
       {role === "ADMIN" && renderAdminDashboard()}
       {role === "LANDLORD" && renderLandlordDashboard()}
       {role === "TENANT" && renderTenantDashboard()}
@@ -547,69 +364,29 @@ export default function Dashboard() {
   );
 }
 
-function TenantMetricCard({ title, value, icon: Icon, iconColor }) {
+function KpiCard({ title, value, icon: Icon, iconColor }) {
   return (
-    <div className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm flex items-center space-x-5 group hover:shadow-lg transition-all duration-300">
-      <div
-        className={`p-4 rounded-[20px] transition-transform group-hover:scale-110 ${iconColor}`}
-      >
+    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+      <div className={`p-3.5 rounded-xl ${iconColor}`}>
         <Icon className="h-6 w-6" />
       </div>
       <div>
-        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
-          {title}
-        </p>
-        <p className="text-xl font-bold text-gray-900 tracking-tight">
-          {value}
-        </p>
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{title}</p>
+        <p className="text-2xl font-extrabold text-slate-900 mt-0.5">{value.toString().toLocaleString()}</p>
       </div>
     </div>
   );
 }
 
-function BookingCard({ title, date, status, icon: Icon }) {
+function TenantMetricCard({ title, value, icon: Icon, iconColor }) {
   return (
-    <div className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm hover:shadow-md transition">
-      <div className="flex justify-between items-start mb-4">
-        <div className="p-3 bg-gray-50 rounded-xl text-blue-600">
-          <Icon className="h-5 w-5" />
-        </div>
-        <span
-          className={`px-3 py-1 rounded-lg text-[8px] font-bold tracking-widest uppercase ${status === "CONFIRMED" ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"}`}
-        >
-          {status}
-        </span>
-      </div>
-      <h4 className="text-sm font-bold text-gray-900 mb-1">{title}</h4>
-      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
-        {date}
-      </p>
-    </div>
-  );
-}
-
-function KpiCard({ title, value, trend, isPositive, icon: Icon, iconColor }) {
-  return (
-    <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm shadow-gray-50 flex flex-col justify-between group hover:shadow-xl hover:shadow-gray-100 transition-all duration-300 transform hover:-translate-y-1">
-      <div className="flex justify-between items-start mb-6">
-        <div className={`p-3.5 rounded-2xl ${iconColor}`}>
-          <Icon className="h-6 w-6" />
-        </div>
-        <div
-          className={`flex items-center space-x-1 text-xs font-bold ${isPositive ? "text-green-500" : "text-red-500"}`}
-        >
-          <span className="tracking-widest">
-            {isPositive ? "↑" : "↓"} +{trend}%
-          </span>
-        </div>
+    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+      <div className={`p-3.5 rounded-xl ${iconColor}`}>
+        <Icon className="h-6 w-6" />
       </div>
       <div>
-        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">
-          {title}
-        </p>
-        <p className="text-3xl font-bold text-gray-900 tracking-tight">
-          {value.toString().toLocaleString()}
-        </p>
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{title}</p>
+        <p className="text-xl font-extrabold text-slate-900 mt-0.5">{value}</p>
       </div>
     </div>
   );
@@ -617,42 +394,26 @@ function KpiCard({ title, value, trend, isPositive, icon: Icon, iconColor }) {
 
 function PropertyCard({ image, title, location, units, occupancy, status }) {
   return (
-    <div className="bg-white rounded-[32px] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer">
-      <div className="relative h-60 overflow-hidden">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
-        />
-        <div className="absolute top-6 right-6">
-          <span
-            className={`px-4 py-1.5 rounded-xl text-[10px] font-bold tracking-widest uppercase ${status === "FULL" ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"}`}
-          >
-            {status}
-          </span>
-        </div>
+    <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition duration-200">
+      <div className="relative h-48 overflow-hidden">
+        <img src={image} alt={title} className="w-full h-full object-cover" />
+        <span className={`absolute top-4 right-4 px-3 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-wider ${
+          status === "FULL" ? "bg-emerald-600 text-white" : "bg-amber-500 text-white"
+        }`}>
+          {status}
+        </span>
       </div>
-      <div className="p-8">
-        <h4 className="text-xl font-bold text-gray-900 tracking-tight mb-1">
-          {title}
-        </h4>
-        <div className="flex items-center text-gray-400 text-xs font-semibold uppercase tracking-widest mb-8">
-          <HomeIcon className="h-4 w-4 mr-1.5" />
-          {location}
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 pt-6 border-t border-gray-50">
+      <div className="p-6">
+        <h4 className="text-lg font-bold text-slate-900 truncate">{title}</h4>
+        <p className="text-xs font-medium text-slate-400 mb-4">{location}</p>
+        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 text-xs">
           <div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
-              Units
-            </p>
-            <p className="text-lg font-bold text-gray-900">{units} Units</p>
+            <span className="text-slate-400 font-bold uppercase tracking-wider block text-[10px]">Units</span>
+            <span className="font-extrabold text-slate-900 text-base">{units}</span>
           </div>
           <div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
-              Occupancy
-            </p>
-            <p className="text-lg font-bold text-gray-900">{occupancy}%</p>
+            <span className="text-slate-400 font-bold uppercase tracking-wider block text-[10px]">Occupancy</span>
+            <span className="font-extrabold text-slate-900 text-base">{occupancy}%</span>
           </div>
         </div>
       </div>
