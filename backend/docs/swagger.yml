@@ -15,6 +15,8 @@ info:
     Public endpoints: /auth/registry (for LANDLORD/TENANT), /auth/login
 
 servers:
+  - url: https://api.rentora.cc/api/v1
+    description: Production server
   - url: http://localhost:3000/api/v1
     description: Local development server
 
