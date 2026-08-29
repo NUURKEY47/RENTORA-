@@ -53,6 +53,12 @@ export default function Register() {
       return;
     }
 
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      toast.error("Password must be at least 8 characters long and include a number and special character");
+      return;
+    }
+
     if (!agreed) {
       toast.error("You must agree to the Terms of Service and Privacy Policy");
       return;
