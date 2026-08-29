@@ -31,8 +31,15 @@ export default function Register() {
   // Password strength calculation
   const getPasswordStrength = (pass) => {
     if (!pass) return { text: "", color: "bg-slate-200", width: "w-0" };
-    if (pass.length < 6) return { text: "Weak", color: "bg-rose-500", width: "w-1/3" };
-    if (pass.length < 10 || !/\d/.test(pass)) return { text: "Medium", color: "bg-amber-500", width: "w-2/3" };
+    const hasNum = /\d/.test(pass);
+    const hasSpecial = /[!@#$%^&*]/.test(pass);
+
+    if (pass.length < 8 || !hasNum || !hasSpecial) {
+      return { text: "Weak (Requires 8+ chars, 1 number & 1 special char)", color: "bg-rose-500", width: "w-1/3" };
+    }
+    if (pass.length < 12) {
+      return { text: "Medium", color: "bg-amber-500", width: "w-2/3" };
+    }
     return { text: "Strong", color: "bg-emerald-500", width: "w-full" };
   };
 
@@ -66,7 +73,12 @@ export default function Register() {
         navigate("/login");
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Registration failed");
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        "Registration failed";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -157,22 +169,20 @@ export default function Register() {
                   <button
                     type="button"
                     onClick={() => setRole("TENANT")}
-                    className={`py-2.5 px-3 rounded-lg text-xs font-bold transition duration-200 ${
-                      role === "TENANT"
-                        ? "bg-indigo-600 text-white shadow-md"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
+                    className={`py-2.5 px-3 rounded-lg text-xs font-bold transition duration-200 ${role === "TENANT"
+                      ? "bg-indigo-600 text-white shadow-md"
+                      : "text-slate-600 hover:text-slate-900"
+                      }`}
                   >
                     Tenant / Shopkeeper
                   </button>
                   <button
                     type="button"
                     onClick={() => setRole("LANDLORD")}
-                    className={`py-2.5 px-3 rounded-lg text-xs font-bold transition duration-200 ${
-                      role === "LANDLORD"
-                        ? "bg-indigo-600 text-white shadow-md"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
+                    className={`py-2.5 px-3 rounded-lg text-xs font-bold transition duration-200 ${role === "LANDLORD"
+                      ? "bg-indigo-600 text-white shadow-md"
+                      : "text-slate-600 hover:text-slate-900"
+                      }`}
                   >
                     Landlord / Agent
                   </button>
@@ -192,7 +202,7 @@ export default function Register() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Jane Doe"
+                    placeholder="e.g. noor mohamed"
                     className="pl-11 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition font-medium text-slate-900 placeholder:text-slate-400 text-sm outline-none"
                     required
                   />
@@ -212,7 +222,7 @@ export default function Register() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="jane@example.com"
+                    placeholder="name@example.com"
                     className="pl-11 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition font-medium text-slate-900 placeholder:text-slate-400 text-sm outline-none"
                     required
                   />
@@ -313,9 +323,8 @@ export default function Register() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-3.5 px-6 rounded-xl text-white font-bold text-sm tracking-wide bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 shadow-lg shadow-indigo-600/30 transition duration-200 ${
-                  loading ? "opacity-75 cursor-not-allowed" : ""
-                }`}
+                className={`w-full py-3.5 px-6 rounded-xl text-white font-bold text-sm tracking-wide bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 shadow-lg shadow-indigo-600/30 transition duration-200 ${loading ? "opacity-75 cursor-not-allowed" : ""
+                  }`}
               >
                 {loading ? "Creating Account..." : "CREATE ACCOUNT"}
               </button>

@@ -12,6 +12,7 @@ model User {
   id           Int        @id @default(autoincrement())
   name         String
   email        String     @unique
+  isVerified   Boolean    @default(false)  
   managedById  Int?
   unitId       Int?
   idNumber     String?

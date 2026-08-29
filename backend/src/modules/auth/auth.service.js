@@ -12,6 +12,11 @@ export const authService = {
     if (currentUser && currentUser.id) {
       data.managedById = currentUser.id;
     }
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+    if (!passwordRegex.test(data.password)) {
+      throw new AppError("Password must be at least 8 characters long and include a number and special character", 400);
+    }
 
     data.password = await bcrypt.hash(data.password, 10);
     const user = await authRepository.createUser(data);
@@ -35,7 +40,7 @@ export const authService = {
     }
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
-      throw new AppError("Password is incorrect", 422);
+      throw new AppError("Invalid email or password", 401);
     }
     const token = jwt.sign(
       {

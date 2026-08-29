@@ -39,9 +39,9 @@ const globalErrorHandler = (err, req, res, next) => {
 
   err = handleKnownErrors(err);
 
-  if (err instanceof AppError) {
-    return res.status(err.statusCode).json({
-      status: err.status,
+  if (err instanceof AppError || (err.statusCode && err.statusCode < 500)) {
+    return res.status(err.statusCode || 400).json({
+      status: err.status || "error",
       message: err.message,
       details: err.details || undefined,
     });
