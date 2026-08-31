@@ -1,132 +1,64 @@
-# RealEstate Management System API
+# 🏢 Rentora — Commercial Plaza & Real Estate Management Platform
 
-Backend API for a complete real estate platform — managing properties, units, landlords, tenants, and role-based access control.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-v20.x-green.svg)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-v4.x-000000.svg)](https://expressjs.com/)
+[![React](https://img.shields.io/badge/React-v18.x-61DAFB.svg)](https://react.dev/)
+[![Prisma](https://img.shields.io/badge/Prisma-v5.x-2D3748.svg)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v16-4169E1.svg)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED.svg)](https://www.docker.com/)
 
-Built with clean architecture, modern Node.js practices, Prisma + PostgreSQL, JWT authentication, and centralized error handling.
+> A production-grade, multi-tenant commercial plaza and real estate management SaaS engineered to automate M-Pesa rent collections, floor-by-floor stall tracking, tenant onboarding, and financial reconciliation in Nairobi, Kenya.
 
-## Tech Stack
+🔗 **Live Web Application**: [https://rentora.cc](https://rentora.cc)  
+📚 **Interactive Swagger API Documentation**: [https://api.rentora.cc/docs](https://api.rentora.cc/docs)
 
-- **Node.js** — Runtime  
-- **Express.js** — Web framework  
-- **Prisma** — ORM  
-- **PostgreSQL** — Database  
-- **JWT** — Authentication & authorization  
-- **bcrypt** — Password hashing  
-- **Zod** — Input validation  
-- **AppError** — Custom error handling  
+---
 
-## Features
+## 🌟 Key Platform Features
 
-- Full user authentication (register, login, JWT)  
-- Role-based access control  
-  - SUPER_ADMIN: full access  
-  - SUB_ADMIN: restricted to managed landlords/tenants  
-  - LANDLORD: own properties/units/tenants  
-  - TENANT: own unit dashboard  
-- Property CRUD with ownership checks  
-- Unit CRUD with availability status  
-- Landlord list, dashboard, update, delete  
-- Tenant creation & unit assignment  
-- Hierarchy via managedById  
-- Protected routes & ownership validation  
+- 🏪 **Commercial Plaza & Stall Matrix**: Floor-by-floor visual tracking of 100+ shopping stalls with real-time status (Paid 🟢 | Overdue 🔴 | Vacant 🟡).
+- 💳 **M-Pesa Automated Rent Collection**: Direct M-Pesa Daraja API integration with STK Push prompts and automated digital receipts.
+- 🔐 **Role-Based Access Control (RBAC)**: Secure multi-role architecture (`ADMIN`, `LANDLORD`, `TENANT`) using Bearer JWT tokens and Bcrypt salt hashing.
+- 🛡️ **Anti-Enumeration & Security**: Generic authentication error handling, Zod schema input validation, and password strength regex rules.
+- 👤 **Self-Service User Profiles**: Profile details editing, password changes, and cryptographic SHA-256 password reset tokens with 1-hour expiration.
+- 📊 **1-Click Financial Analytics**: Automated revenue statements, overdue rent audits, and tenant audit ledgers.
 
-## Installation
+---
 
-1. Clone the repository
-   ```bash
-   git clone https://github.com/yourusername/RealEstateApiV2.git
-   cd RealEstateApiV2/backend
+## 🏗️ 5-Layer Backend Architecture
 
-Install dependenciesBashnpm install
-Create .env file in rootenvDATABASE_URL=postgresql://user:password@localhost:5432/realstate_MasterApi143
-JWT_SECRET=your_very_long_random_secret_here
-PORT=3000
-NODE_ENV=development
-Generate Prisma client & sync schemaBashnpx prisma generate
-npx prisma db push
-Start the serverDevelopment mode (auto-restart):Bashnpm run devProduction mode:Bashnpm start
+Rentora follows a strict **Clean 5-Layer Backend Pattern**:
 
-Server available at: http://localhost:3000/api/v1
-## Project Structure
-Clean architecture with modules separated by domain (user, property, unit, landlord, tenant).
+- **Routes (`src/modules/*/routes.js`)**: Handles URL endpoint routing and HTTP methods.
+- **Guards (`src/middlewares/*`)**: JWT authentication verification (`verifyToken`) and Zod schema validation (`validate`).
+- **Controllers (`src/modules/*/controller.js`)**: Extracts parameters and packages JSON responses `{ status, message, data }`.
+- **Services (`src/modules/*/service.js`)**: Contains pure business logic, Bcrypt encryption, and security constraints.
+- **Repositories (`src/modules/*/repository.js`)**: Executes database queries using Prisma ORM with explicit `select` rules (excluding password hashes).
+
+---
+
+## 📂 Project Structure
 
 ```text
-RealEstateApiV2/backend/
-├── src/
-│   ├── config/                  # Database connection
-│   ├── middlewares/             # Auth, validation, error handler
-│   ├── modules/
-│   │   ├── auth/                # Login, register, checkFirstAdmin
-│   │   ├── user/                # User CRUD + managedById
-│   │   ├── property/            # Property CRUD
-│   │   ├── unit/                # Unit CRUD + assignment
-│   │   ├── landlord/            # Landlord list/dashboard
-│   │   └── tenant/              # Tenant create/assign
-│   ├── routes/                  # All route files
-│   ├── utils/                   # AppError, sendResponse, catchAsync
-│   ├── app.js                   # Express app setup
-│   └── server.js                # Server entry point
-├── prisma/
-│   └── schema.prisma
-├── .env
-├── package.json
-└── README.md
-
-API Endpoints (Overview)
-Authentication
-
-POST /auth/registry — Register user
-POST /auth/login — Login
-
-Users
-
-GET /users — List users (Admin only)
-PUT /users/:id — Update user (managedById, unitId, etc.)
-DELETE /users/:id — Delete user
-
-Properties
-
-POST /properties — Create property
-GET /properties — List properties
-PUT /properties/:id — Update property
-DELETE /properties/:id — Delete property
-
-Units
-
-POST /units — Create unit
-GET /units — List units
-PUT /units/:id — Update unit
-DELETE /units/:id — Delete unit
-
-Landlords
-
-GET /landlords — List landlords (role-filtered)
-GET /landlords/dashboard — Landlord dashboard
-
-Tenants
-
-POST /tenants — Create tenant
-PUT /tenants/:id/assign-unit — Assign tenant to unit
-GET /tenants — List tenants
-
-Full Swagger documentation available at /api-docs (if enabled) or via Postman.
-Security Highlights
-
-Passwords hashed with bcrypt
-JWT tokens for authentication
-Protected routes with verifyToken & authorizeRoles
-Ownership checks (landlordId, managedById)
-Global error handling with AppError
-
-Contributing
-
-Fork the repository
-Create feature branch (git checkout -b feature/amazing-feature)
-Commit changes (git commit -m 'Add amazing feature')
-Push (git push origin feature/amazing-feature)
-Open Pull Request
-
-License
-ISC
-Made with ❤️ in Nairobi by Noor Mohamed Abdikadir
-Last updated: March 2026
+Property-Management-API/
+├── backend/
+│   ├── src/
+│   │   ├── config/          # Prisma PostgreSQL client instance
+│   │   ├── middlewares/     # JWT Auth, Zod validation, global error handler
+│   │   ├── modules/
+│   │   │   ├── auth/        # Login, Register, Password Reset, FirstAdmin
+│   │   │   ├── user/        # User CRUD, Profile, Password edit, managedById
+│   │   │   ├── property/    # Property & Plaza CRUD, Landlord assignment
+│   │   │   ├── unit/        # Unit & Stall CRUD, Vacancy management
+│   │   │   ├── landlord/    # Landlord portfolio & dashboard stats
+│   │   │   └── tenant/      # Tenant onboarding & unit assignment
+│   │   ├── utils/           # AppError, sendResponse, catchAsync
+│   │   └── server.js        # Express server entry point
+│   ├── docs/                # OpenAPI / Swagger specification (swagger.yml)
+│   ├── prisma/
+│   │   └── schema.prisma    # PostgreSQL database schema & models
+│   └── Dockerfile
+├── frontend/                # React (Vite) Single Page Application
+├── docker-compose.yml       # Production multi-container orchestration
+└── Caddyfile                # Reverse proxy & automatic SSL/HTTPS routing
