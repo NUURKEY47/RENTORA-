@@ -10,6 +10,8 @@ import UnitsList from "../pages/units/UnitsList";
 import TenantsList from "../pages/tenants/TenantsList";
 import LandlordsList from "../pages/landlords/LandlordsList";
 import UserManagement from "../pages/admin/UserManagement";
+import Profile from "../pages/Profile";
+import ForgotPassword from "../pages/auth/ForgotPassword";
 
 export default function AppRoutes() {
   return (
@@ -18,10 +20,12 @@ export default function AppRoutes() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       {/* Protected routes - only logged-in users */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/properties" element={<PropertiesList />} />
           <Route path="/units" element={<UnitsList />} />
           <Route path="/tenants" element={<TenantsList />} />

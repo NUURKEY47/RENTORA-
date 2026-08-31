@@ -7,10 +7,19 @@ import {
   getUserById,
   updateUserById,
   deleteUserById,
+  getProfile,
+  updateProfile,
+  changePassword,
 } from "./user.controller.js";
 
 const router = express.Router();
 
+// Self-service profile routes (accessible by any logged-in user)
+router.get("/profile", verifyToken, getProfile);
+router.put("/profile", verifyToken, updateProfile);
+router.put("/password", verifyToken, changePassword);
+
+// Admin-only management routes
 router.get("/", verifyToken, authorizeRoles("ADMIN"), getAllUsers);
 router.get("/:id", verifyToken, authorizeRoles("ADMIN"), getUserById);
 router.put(

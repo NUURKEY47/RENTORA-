@@ -9,6 +9,7 @@ import {
   ArrowLeftOnRectangleIcon,
   Square3Stack3DIcon,
   MagnifyingGlassIcon,
+  UserIcon,
   XMarkIcon
 } from "@heroicons/react/24/outline";
 
@@ -36,9 +37,10 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
     ],
   };
 
-  const systemItems = role === "ADMIN" ? [
-    { name: "User Management", path: "/user-management", icon: UserGroupIcon },
-  ] : [];
+  const systemItems = [
+    ...(role === "ADMIN" ? [{ name: "User Management", path: "/user-management", icon: UserGroupIcon }] : []),
+    { name: "Account Settings", path: "/profile", icon: UserIcon },
+  ];
 
   const currentMenuItems = menuItems[role] || [];
 

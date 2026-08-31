@@ -74,4 +74,20 @@ export const userRepository = {
   deleteUser: async (id) => {
     return await prisma.user.delete({ where: { id } });
   },
+
+  findUserByResetToken: async (token) => {
+    return await prisma.user.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExpires: { gt: new Date() },
+      },
+    });
+  },
+
+  setResetToken: async (id, token, expires) => {
+    return await prisma.user.update({
+      where: { id },
+      data: { resetToken: token, resetTokenExpires: expires },
+    });
+  },
 };

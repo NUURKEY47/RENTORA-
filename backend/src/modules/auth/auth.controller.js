@@ -57,3 +57,21 @@ export const checkFirstAdmin = async (req, res, next) => {
       .json({ message: error.message || "Unauthorized registration attempt" });
   }
 };
+
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const result = await authService.forgotPassword(req.body.email);
+    sendResponse(res, { message: result.message, data: result.resetToken ? { resetToken: result.resetToken } : undefined });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req, res, next) => {
+  try {
+    const result = await authService.resetPassword(req.body.token, req.body.newPassword);
+    sendResponse(res, { message: result.message });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { 
   BellIcon, 
@@ -38,15 +39,15 @@ export default function Navbar({ setSidebarOpen }) {
           <QuestionMarkCircleIcon className="h-5 w-5" />
         </button>
         <div className="h-6 w-px bg-slate-200 mx-2"></div>
-        <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 bg-indigo-600 text-white font-bold rounded-xl flex items-center justify-center text-sm shadow-sm">
+        <Link to="/profile" className="flex items-center space-x-3 hover:opacity-80 transition cursor-pointer">
+          <div className="w-9 h-9 bg-indigo-600 text-white font-bold rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">
             {user?.name?.charAt(0) || "U"}
           </div>
           <div className="hidden md:block text-left">
             <p className="text-xs font-extrabold text-slate-900 leading-tight">{user?.name || "Account"}</p>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{role}</p>
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );

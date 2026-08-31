@@ -1,9 +1,11 @@
 // src/modules/auth/auth.service.js
 
 import { authRepository } from "./auth.repository.js";
+import { userRepository } from "../user/user.repository.js";
 import AppError from "../../utils/AppError.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 export const authService = {
   registry: async (data, currentUser) => {
@@ -99,5 +101,47 @@ export const authService = {
     }
 
     return null; // Guest registration
+  },
+
+  forgotPassword: async (email) => {
+    const user = await authRepository.findUserByEmail(email);
+    // Generic response to prevent user enumeration
+    if (!user) {
+      return { message: "If an account with that email exists, a password reset link has been generated." };
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    const expires = new Date(Date.now() + 3600000); // 1 hour
+
+    await userRepository.setResetToken(user.id, hashedToken, expires);
+
+    return {
+      message: "If an account with that email exists, a password reset link has been generated.",
+      resetToken, // Returned for testing / email delivery
+    };
+  },
+
+  resetPassword: async (token, newPassword) => {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const user = await userRepository.findUserByResetToken(hashedToken);
+
+    if (!user) {
+      throw new AppError("Invalid or expired password reset token", 400);
+    }
+
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      throw new AppError("New password must be at least 8 characters long and include a number and special character", 400);
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await userRepository.updateUser(user.id, {
+      password: hashedPassword,
+      resetToken: null,
+      resetTokenExpires: null,
+    });
+
+    return { message: "Password has been reset successfully" };
   },
 };

@@ -134,4 +134,33 @@ export const userService = {
 
     await userRepository.deleteUser(id);
   },
+
+  updateProfile: async (userId, data) => {
+    const user = await userRepository.findUserById(userId);
+    if (!user) throw new AppError("User not found", 404);
+
+    if (data.email && data.email !== user.email) {
+      const existing = await userRepository.findManyUsers({ email: data.email });
+      if (existing.length > 0) throw new AppError("Email is already taken", 400);
+    }
+
+    return await userRepository.updateUser(userId, { name: data.name, email: data.email });
+  },
+
+  changePassword: async (userId, { oldPassword, newPassword }) => {
+    const user = await userRepository.findFullUserById(userId);
+    if (!user) throw new AppError("User not found", 404);
+
+    const isValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isValid) throw new AppError("Current password is incorrect", 400);
+
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      throw new AppError("New password must be at least 8 characters long and include a number and special character", 400);
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await userRepository.updateUser(userId, { password: hashedPassword });
+    return { message: "Password updated successfully" };
+  },
 };

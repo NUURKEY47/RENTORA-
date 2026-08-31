@@ -59,3 +59,30 @@ export const deleteUserById = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getProfile = async (req, res, next) => {
+  try {
+    const user = await userService.getUserById(req.user.id, req.user);
+    sendResponse(res, { message: "Profile fetched successfully", data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateProfile = async (req, res, next) => {
+  try {
+    const updatedUser = await userService.updateProfile(req.user.id, req.body);
+    sendResponse(res, { message: "Profile updated successfully", data: updatedUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const result = await userService.changePassword(req.user.id, req.body);
+    sendResponse(res, { message: result.message });
+  } catch (error) {
+    next(error);
+  }
+};
