@@ -62,7 +62,7 @@ export const deleteUserById = async (req, res, next) => {
 
 export const getProfile = async (req, res, next) => {
   try {
-    const user = await userService.getUserById(req.user.id, req.user);
+    const user = await userService.getProfile(req.user.id);
     sendResponse(res, { message: "Profile fetched successfully", data: user });
   } catch (error) {
     next(error);

@@ -135,6 +135,14 @@ export const userService = {
     await userRepository.deleteUser(id);
   },
 
+  getProfile: async (userId) => {
+    const foundUser = await userRepository.findUserById(userId);
+    if (!foundUser) {
+      throw new AppError("User not found", 404);
+    }
+    return foundUser;
+  },
+
   updateProfile: async (userId, data) => {
     const user = await userRepository.findUserById(userId);
     if (!user) throw new AppError("User not found", 404);
