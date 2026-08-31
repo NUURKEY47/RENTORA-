@@ -1,4 +1,4 @@
-# 🏢 Rentora — Commercial Plaza & Real Estate Management Platform
+# Rentora — Commercial Plaza & Real Estate Management Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-v20.x-green.svg)](https://nodejs.org/)
@@ -17,16 +17,16 @@
 
 ## 🌟 Key Platform Features
 
-- 🏪 **Commercial Plaza & Stall Matrix**: Floor-by-floor visual tracking of 100+ shopping stalls with real-time status (Paid 🟢 | Overdue 🔴 | Vacant 🟡).
-- 💳 **M-Pesa Automated Rent Collection**: Direct M-Pesa Daraja API integration with STK Push prompts and automated digital receipts.
-- 🔐 **Role-Based Access Control (RBAC)**: Secure multi-role architecture (`ADMIN`, `LANDLORD`, `TENANT`) using Bearer JWT tokens and Bcrypt salt hashing.
-- 🛡️ **Anti-Enumeration & Security**: Generic authentication error handling, Zod schema input validation, and password strength regex rules.
-- 👤 **Self-Service User Profiles**: Profile details editing, password changes, and cryptographic SHA-256 password reset tokens with 1-hour expiration.
-- 📊 **1-Click Financial Analytics**: Automated revenue statements, overdue rent audits, and tenant audit ledgers.
+- **Commercial Plaza & Stall Matrix**: Floor-by-floor visual tracking of 100+ shopping stalls with real-time status (Paid 🟢 | Overdue 🔴 | Vacant 🟡).
+- **M-Pesa Automated Rent Collection**: Direct M-Pesa Daraja API integration with STK Push prompts and automated digital receipts.
+-  **Role-Based Access Control (RBAC)**: Secure multi-role architecture (`ADMIN`, `LANDLORD`, `TENANT`) using Bearer JWT tokens and Bcrypt salt hashing.
+-  **Anti-Enumeration & Security**: Generic authentication error handling, Zod schema input validation, and password strength regex rules.
+-  **Self-Service User Profiles**: Profile details editing, password changes, and cryptographic SHA-256 password reset tokens with 1-hour expiration.
+-  **1-Click Financial Analytics**: Automated revenue statements, overdue rent audits, and tenant audit ledgers.
 
 ---
 
-## 🏗️ 5-Layer Backend Architecture
+## 5-Layer Backend Architecture
 
 Rentora follows a strict **Clean 5-Layer Backend Pattern**:
 
