@@ -62,3 +62,17 @@ Property-Management-API/
 ├── frontend/                # React (Vite) Single Page Application
 ├── docker-compose.yml       # Production multi-container orchestration
 └── Caddyfile                # Reverse proxy & automatic SSL/HTTPS routing
+
+Author & Contact
+Noor Mohamed Abdikadir
+Full-Stack Software Engineer — Nairobi, Kenya 🇰🇪
+
+LinkedIn: linkedin.com/in/masternuurkey47
+Email: 
+yessnoor143@gmail.com
+Live Platform: rentora.cc
+
+
+
+
+
