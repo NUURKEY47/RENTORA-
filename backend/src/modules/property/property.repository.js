@@ -41,7 +41,13 @@ export const propertyRepository = {
       where,
       include: { 
         landlord: { select: { id: true, name: true } },
-        category: true
+        category: true,
+        units: {
+          include: {
+            tenants: { select: { id: true, name: true } },
+            invoices: true
+          }
+        }
       }
     });
   },

@@ -65,6 +65,8 @@ model Unit {
   name        String
   price       Float
   status      String
+  unitType    String    @default("stall") // stall | apartment | shop | office
+  listingType String    @default("rent")  // rent | sale
   propertyId  Int
   size        String?
   description String?

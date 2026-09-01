@@ -33,6 +33,8 @@ export default function UnitForm({ unit, onClose, onSuccess }) {
         name: unit.name || "",
         price: unit.price || "",
         status: unit.status || "available",
+        unitType: unit.unitType || "stall",
+        listingType: unit.listingType || "rent",
         propertyId: unit.propertyId || "",
         size: unit.size || "",
         description: unit.description || "",
@@ -122,6 +124,40 @@ export default function UnitForm({ unit, onClose, onSuccess }) {
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
                 required
               />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Unit / Space Type
+              </label>
+              <select
+                name="unitType"
+                value={formData.unitType || "stall"}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
+              >
+                <option value="stall">Commercial Stall</option>
+                <option value="shop">Retail Shop</option>
+                <option value="office">Office Suite</option>
+                <option value="apartment">Residential Apartment</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Listing Model
+              </label>
+              <select
+                name="listingType"
+                value={formData.listingType || "rent"}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
+              >
+                <option value="rent">For Rent (Monthly)</option>
+                <option value="sale">For Sale (Outright)</option>
+              </select>
             </div>
           </div>
 

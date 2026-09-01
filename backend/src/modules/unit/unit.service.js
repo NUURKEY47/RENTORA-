@@ -122,6 +122,14 @@ export const unitService = {
       where.status = query.status;
     }
 
+    if (query.unitType) {
+      where.unitType = query.unitType;
+    }
+
+    if (query.listingType) {
+      where.listingType = query.listingType;
+    }
+
     return await unitRepository.findManyUnits(where, true);
   },
 

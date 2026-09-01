@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { forgotPassword, resetPassword } from '../../api/userService';
 import toast from 'react-hot-toast';
 import { EnvelopeIcon, KeyIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 export default function ForgotPassword() {
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState('request'); // 'request' | 'reset'
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Auto-detect reset token if user arrives via email link (?token=xyz)
+  useEffect(() => {
+    const urlToken = searchParams.get('token');
+    if (urlToken) {
+      setToken(urlToken);
+      setStep('reset');
+    }
+  }, [searchParams]);
 
   // Real-time password strength helper
   const getPasswordStrength = (pass) => {
@@ -34,9 +44,10 @@ export default function ForgotPassword() {
     setLoading(true);
     try {
       const res = await forgotPassword(email);
+      const tokenVal = res.data?.resetToken || res.data?.data?.resetToken || res.resetToken;
       toast.success(res.message || "Reset token generated successfully!");
-      if (res.data?.resetToken) {
-        setToken(res.data.resetToken); // For testing / direct workflow
+      if (tokenVal) {
+        setToken(tokenVal);
       }
       setStep('reset');
     } catch (err) {

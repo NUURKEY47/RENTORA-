@@ -4,6 +4,7 @@ import { getAllProperties, deleteProperty } from "../../api/propertyService";
 import toast from "react-hot-toast";
 import PropertyForm from "./PropertyForm";
 import AssignLandlordModal from "./AssignLandlordModal";
+import StallMatrix from "../../components/properties/StallMatrix";
 import { PlusIcon, BuildingOfficeIcon, PencilIcon, TrashIcon, MapPinIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 
 export default function PropertiesList() {
@@ -78,6 +79,15 @@ export default function PropertiesList() {
           <div className="p-6 border-b border-gray-200 bg-gray-50/50">
             <h2 className="text-lg font-bold text-gray-900">All Properties</h2>
             <p className="text-sm text-gray-500 mt-1">Manage all your real estate assets here.</p>
+          </div>
+
+          {/* Module 4: Commercial Plaza Stall Matrix Grid */}
+          <div className="p-6">
+            <StallMatrix 
+              propertyName={properties[0]?.name || "Commercial Plaza"} 
+              properties={properties}
+              units={properties.flatMap(p => p.units || [])} 
+            />
           </div>
 
           {loading ? (

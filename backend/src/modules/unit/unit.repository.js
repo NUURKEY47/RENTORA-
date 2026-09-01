@@ -31,6 +31,8 @@ export const unitRepository = {
         name: true,
         price: true,
         status: true,
+        unitType: true,
+        listingType: true,
         size: true,
         description: true,
         propertyId: true,
