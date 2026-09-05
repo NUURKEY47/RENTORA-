@@ -12,6 +12,7 @@ import LandlordsList from "../pages/landlords/LandlordsList";
 import UserManagement from "../pages/admin/UserManagement";
 import Profile from "../pages/Profile";
 import ForgotPassword from "../pages/auth/ForgotPassword";
+import FinanceList from "../pages/finance/FinanceList";
 
 export default function AppRoutes() {
   return (
@@ -31,7 +32,7 @@ export default function AppRoutes() {
           <Route path="/tenants" element={<TenantsList />} />
           <Route path="/landlords" element={<LandlordsList />} />
           <Route path="/user-management" element={<UserManagement />} />
-          <Route path="/finance" element={<div className="p-10 text-gray-500 font-bold uppercase tracking-widest">Finance implementation coming soon...</div>} />
+          <Route path="/finance" element={<FinanceList />} />
         </Route>
       </Route>
       {/* Catch-all redirect */}

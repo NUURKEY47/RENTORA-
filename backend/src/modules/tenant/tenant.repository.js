@@ -38,8 +38,15 @@ export const tenantRepository = {
         return await prisma.user.findMany({
             where,
             include: {
+                manager: { select: { id: true, name: true, role: true } },
                 unit: {
-                    include: { property: true }
+                    include: {
+                        property: {
+                            include: {
+                                landlord: { select: { id: true, name: true, role: true } }
+                            }
+                        }
+                    }
                 }
             }
         });

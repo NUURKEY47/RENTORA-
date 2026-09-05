@@ -31,8 +31,22 @@ export default function StallMatrix({ units = [], properties = [], propertyName 
         unit.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
         unit.tenants?.[0]?.name?.toLowerCase().includes(debouncedSearch.toLowerCase());
 
-      // Status filter matching
-      const unitStatus = unit.status === 'available' ? 'vacant' : (unit.invoices?.some(i => i.status === 'overdue') ? 'overdue' : 'paid');
+      // Status calculation
+      const isAvailable = unit.status === 'available';
+      const hasPaid = unit.invoices?.some(i => i.status === 'PAID');
+      const hasOverdue = unit.invoices?.some(i => i.status === 'OVERDUE');
+
+      let unitStatus = 'vacant';
+      if (isAvailable) {
+        unitStatus = 'vacant';
+      } else if (hasOverdue) {
+        unitStatus = 'overdue';
+      } else if (hasPaid) {
+        unitStatus = 'paid';
+      } else {
+        unitStatus = 'pending'; // Occupied with pending or missing invoice
+      }
+
       const matchesStatus = statusFilter === 'ALL' || unitStatus === statusFilter;
 
       // Floor matching (Extract floor from unit name e.g., "G-12", "F1-04", "F2-10")
@@ -53,9 +67,10 @@ export default function StallMatrix({ units = [], properties = [], propertyName 
     const total = propertyUnits.length;
     const vacant = propertyUnits.filter(u => u.status === 'available').length;
     const occupied = total - vacant;
-    const overdue = propertyUnits.filter(u => u.invoices?.some(i => i.status === 'overdue')).length;
-    const paid = Math.max(0, occupied - overdue);
-    return { total, vacant, occupied, overdue, paid };
+    const overdue = propertyUnits.filter(u => u.status !== 'available' && u.invoices?.some(i => i.status === 'OVERDUE')).length;
+    const paid = propertyUnits.filter(u => u.status !== 'available' && u.invoices?.some(i => i.status === 'PAID')).length;
+    const pending = Math.max(0, occupied - overdue - paid);
+    return { total, vacant, occupied, pending, overdue, paid };
   }, [propertyUnits]);
 
   // Dynamic Header Title
@@ -77,20 +92,22 @@ export default function StallMatrix({ units = [], properties = [], propertyName 
           <p className="text-xs text-slate-500 font-medium mt-1">Real-time floor-by-floor stall occupancy and payment status</p>
         </div>
 
-        {/* Legend / Counter Badges */}
-        <div className="flex items-center space-x-3 text-xs font-bold">
-          <div className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-200 flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+        {/* Badge Analytics Pill */}
+        <div className="flex items-center space-x-2 text-xs font-extrabold">
+          <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl">
+            <CheckCircleIcon className="h-4 w-4" />
             <span>Paid ({stats.paid})</span>
           </div>
-
-          <div className="px-3 py-1.5 bg-rose-50 text-rose-700 rounded-xl border border-rose-200 flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 bg-rose-500 rounded-full animate-pulse"></span>
+          <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-orange-50 text-orange-700 border border-orange-200 rounded-xl">
+            <ClockIcon className="h-4 w-4" />
+            <span>Pending ({stats.pending})</span>
+          </div>
+          <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-xl">
+            <ExclamationCircleIcon className="h-4 w-4" />
             <span>Overdue ({stats.overdue})</span>
           </div>
-
-          <div className="px-3 py-1.5 bg-amber-50 text-amber-700 rounded-xl border border-amber-200 flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
+          <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl">
+            <span className="h-2 w-2 rounded-full bg-amber-500"></span>
             <span>Vacant ({stats.vacant})</span>
           </div>
         </div>
@@ -136,6 +153,7 @@ export default function StallMatrix({ units = [], properties = [], propertyName 
           >
             <option value="ALL">All Statuses</option>
             <option value="paid">🟢 Paid Only</option>
+            <option value="pending">🟠 Pending Only</option>
             <option value="overdue">🔴 Overdue Only</option>
             <option value="vacant">🟡 Vacant Only</option>
           </select>
@@ -164,21 +182,26 @@ export default function StallMatrix({ units = [], properties = [], propertyName 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {filteredUnits.map((unit) => {
             const isAvailable = unit.status === 'available';
-            const isOverdue = unit.invoices?.some(i => i.status === 'overdue');
+            const hasPaid = unit.invoices?.some(i => i.status === 'PAID');
+            const hasOverdue = unit.invoices?.some(i => i.status === 'OVERDUE');
 
             // Color coding calculation
-            let cardBg = "bg-emerald-50 border-emerald-200 text-emerald-900 hover:border-emerald-400";
-            let badgeBg = "bg-emerald-500 text-white";
-            let statusText = "PAID";
+            let cardBg = "bg-orange-50 border-orange-200 text-orange-900 hover:border-orange-400";
+            let badgeBg = "bg-orange-500 text-white";
+            let statusText = "PENDING";
 
             if (isAvailable) {
               cardBg = "bg-amber-50/60 border-amber-200 text-amber-900 hover:border-amber-400";
               badgeBg = "bg-amber-500 text-white";
               statusText = "VACANT";
-            } else if (isOverdue) {
+            } else if (hasOverdue) {
               cardBg = "bg-rose-50 border-rose-200 text-rose-900 hover:border-rose-400";
               badgeBg = "bg-rose-600 text-white";
               statusText = "OVERDUE";
+            } else if (hasPaid) {
+              cardBg = "bg-emerald-50 border-emerald-200 text-emerald-900 hover:border-emerald-400";
+              badgeBg = "bg-emerald-500 text-white";
+              statusText = "PAID";
             }
 
             return (

@@ -10,6 +10,7 @@ import {
   Square3Stack3DIcon,
   MagnifyingGlassIcon,
   UserIcon,
+  BanknotesIcon,
   XMarkIcon
 } from "@heroicons/react/24/outline";
 
@@ -20,6 +21,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const menuItems = {
     ADMIN: [
       { name: "Dashboard", path: "/dashboard", icon: HomeIcon },
+      { name: "Finance & Invoices", path: "/finance", icon: BanknotesIcon },
       { name: "Properties", path: "/properties", icon: BuildingOfficeIcon },
       { name: "Units", path: "/units", icon: Square3Stack3DIcon },
       { name: "Landlords", path: "/landlords", icon: UsersIcon },
@@ -27,12 +29,14 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
     ],
     LANDLORD: [
       { name: "Dashboard", path: "/dashboard", icon: HomeIcon },
+      { name: "Finance & Invoices", path: "/finance", icon: BanknotesIcon },
       { name: "My Properties", path: "/properties", icon: BuildingOfficeIcon },
       { name: "Units", path: "/units", icon: Square3Stack3DIcon },
       { name: "My Tenants", path: "/tenants", icon: UserGroupIcon },
     ],
     TENANT: [
       { name: "Dashboard", path: "/dashboard", icon: HomeIcon },
+      { name: "My Invoices", path: "/finance", icon: BanknotesIcon },
       { name: "Find Houses", path: "/units", icon: MagnifyingGlassIcon },
     ],
   };

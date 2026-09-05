@@ -1,52 +1,48 @@
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getAllTenants, deleteTenant } from "../../api/tenantService";
-import toast from "react-hot-toast";
 import TenantForm from "./TenantForm";
-import { PlusIcon, UserIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import {
+  UserGroupIcon,
+  PlusIcon,
+  MagnifyingGlassIcon,
+  UserIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 
 export default function TenantsList() {
   const { role } = useContext(AuthContext);
   const [tenants, setTenants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [search, setSearch] = useState("");
+  const [propertyFilter, setPropertyFilter] = useState("all");
   const [showForm, setShowForm] = useState(false);
   const [editingTenant, setEditingTenant] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [propertyFilter, setPropertyFilter] = useState("all");
 
   useEffect(() => {
     fetchTenants();
   }, []);
 
   const fetchTenants = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       const res = await getAllTenants();
-      setTenants(res.data?.data || res.data || []);
+      const list = res.data?.data || res.data || [];
+      setTenants(list);
       setError(null);
     } catch (err) {
-      const msg = err.response?.data?.message || "Failed to load tenants";
-      setError(msg);
-      toast.error(msg);
+      setError("Failed to load tenants");
+      toast.error("Failed to load tenants");
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredTenants = tenants.filter((t) => {
-    const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          t.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesProperty = propertyFilter === "all" || t.unit?.propertyId.toString() === propertyFilter;
-    return matchesSearch && matchesProperty;
-  });
-
-  const uniqueProperties = Array.from(new Set(tenants.map(t => t.unit?.propertyId))).map(id => {
-    return tenants.find(t => t.unit?.propertyId === id)?.unit?.property;
-  }).filter(p => p);
-
-  const handleCreateNew = () => {
+  const handleCreate = () => {
     setEditingTenant(null);
     setShowForm(true);
   };
@@ -57,7 +53,7 @@ export default function TenantsList() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this tenant? The unit will become available.")) return;
+    if (!window.confirm("Are you sure you want to delete this tenant?")) return;
     try {
       await deleteTenant(id);
       toast.success("Tenant deleted successfully");
@@ -68,175 +64,175 @@ export default function TenantsList() {
   };
 
   const handleFormSuccess = () => {
-    setShowForm(false);
     fetchTenants();
   };
 
+  const uniqueProperties = Array.from(
+    new Map(
+      tenants
+        .filter((t) => t.unit?.property)
+        .map((t) => [t.unit.property.id, t.unit.property])
+    ).values()
+  );
+
+  const filteredTenants = tenants.filter((t) => {
+    const matchesSearch =
+      t.name.toLowerCase().includes(search.toLowerCase()) ||
+      t.email.toLowerCase().includes(search.toLowerCase()) ||
+      (t.phone && t.phone.toLowerCase().includes(search.toLowerCase()));
+
+    const matchesProperty =
+      propertyFilter === "all" ||
+      (t.unit?.propertyId && t.unit.propertyId.toString() === propertyFilter);
+
+    return matchesSearch && matchesProperty;
+  });
+
   return (
     <>
-      <header className="bg-white border-b border-gray-200">
-        <div className="px-6 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900">
-            Tenants Management
-          </h1>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+              <UserGroupIcon className="h-7 w-7 text-indigo-600" />
+              Tenants & Traders Directory
+            </h1>
+            <p className="text-slate-500 text-sm mt-1">
+              Manage residents, commercial plaza stall occupants, and contact details.
+            </p>
+          </div>
           {(role === "ADMIN" || role === "LANDLORD") && (
             <button
-              onClick={handleCreateNew}
-              className="flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm"
+              onClick={handleCreate}
+              className="px-5 py-3 bg-indigo-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center space-x-2 hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/25 shrink-0"
             >
-              <PlusIcon className="h-5 w-5 mr-2" />
-              Add Tenant
+              <PlusIcon className="h-4 w-4 stroke-[3]" />
+              <span>Onboard New Tenant</span>
             </button>
           )}
         </div>
-      </header>
 
-      <main className="flex-1 p-6 overflow-y-auto">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-6 border-b border-gray-200 bg-gray-50/50 space-y-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">All Tenants</h2>
-                <p className="text-sm text-gray-500 mt-1">Manage tenants and their unit assignments.</p>
-              </div>
-              <div className="flex items-center space-x-2 text-sm font-medium">
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full">
-                  {filteredTenants.length} Tenants Found
-                </span>
-              </div>
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="relative">
+              <MagnifyingGlassIcon className="h-5 w-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search name, email or phone..."
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:bg-white focus:ring-2 focus:ring-indigo-600 transition"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
-
-            {/* Filter Bar */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search name or email..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <UserIcon className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
-              </div>
+            <div>
               <select
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition bg-white shadow-sm font-medium"
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 outline-none focus:bg-white focus:ring-2 focus:ring-indigo-600 transition"
                 value={propertyFilter}
                 onChange={(e) => setPropertyFilter(e.target.value)}
               >
                 <option value="all">All Properties</option>
-                {uniqueProperties.map(p => (
-                  <option key={p.id} value={p.id.toString()}>{p.name}</option>
+                {uniqueProperties.map((p) => (
+                  <option key={p.id} value={p.id.toString()}>
+                    {p.name}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
 
           {loading ? (
-            <div className="p-12 text-center text-gray-500">
+            <div className="p-12 text-center text-slate-500 font-medium">
               Loading tenants...
             </div>
           ) : error ? (
-            <div className="p-12 text-center text-red-600">{error}</div>
+            <div className="p-12 text-center text-rose-600 font-medium">{error}</div>
           ) : tenants.length === 0 ? (
-            <div className="p-12 text-center text-gray-500">
-              No tenants yet
+            <div className="p-12 text-center text-slate-400 font-medium">
+              No tenants found.
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                      Name
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                      Email
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                      Assigned Unit
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                      Phone
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                      Status
-                    </th>
-                    <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
-                      Actions
-                    </th>
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
+                    <th className="py-4 px-6">Tenant Name</th>
+                    <th className="py-4 px-6">Email</th>
+                    <th className="py-4 px-6">Assigned Unit</th>
+                    <th className="py-4 px-6">Created / Managed By</th>
+                    <th className="py-4 px-6">Phone</th>
+                    <th className="py-4 px-6">Status</th>
+                    <th className="py-4 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {filteredTenants.map((t) => (
-                    <tr key={t.id} className="hover:bg-gray-50 transition">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        <div className="flex items-center">
-                          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                            <UserIcon className="h-4 w-4 text-blue-600" />
+                <tbody className="divide-y divide-slate-100 text-sm font-medium">
+                  {filteredTenants.map((t) => {
+                    const creatorName = t.manager?.name || t.unit?.property?.landlord?.name || "Super Admin";
+                    const creatorRole = t.manager?.role || (t.unit?.property?.landlord ? "LANDLORD" : "ADMIN");
+
+                    return (
+                      <tr key={t.id} className="hover:bg-slate-50/80 transition">
+                        <td className="py-4 px-6 font-bold text-slate-900">
+                          <div className="flex items-center space-x-3">
+                            <div className="h-8 w-8 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold shrink-0">
+                              <UserIcon className="h-4 w-4" />
+                            </div>
+                            <span>{t.name}</span>
                           </div>
-                          {t.name}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{t.email}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {t.unit ? (
-                          <Link
-                            to="/units"
-                            className="text-blue-600 hover:underline"
-                          >
-                            {t.unit.name}
-                          </Link>
-                        ) : (
-                          "Unassigned"
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {t.phone || "-"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex flex-col space-y-1">
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 text-[10px] font-bold rounded-full w-fit uppercase ${
-                              t.unit
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }`}
-                          >
+                        </td>
+                        <td className="py-4 px-6 text-slate-600">{t.email}</td>
+                        <td className="py-4 px-6">
+                          {t.unit ? (
+                            <Link
+                              to="/units"
+                              className="text-indigo-600 hover:underline font-extrabold"
+                            >
+                              {t.unit.name} ({t.unit.property?.name || "Property"})
+                            </Link>
+                          ) : (
+                            <span className="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-amber-50 text-amber-700 border border-amber-200 uppercase tracking-wider">
+                              Unassigned
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-4 px-6">
+                          <div className="flex flex-col">
+                            <span className="font-extrabold text-slate-900">{creatorName}</span>
+                            <span className="text-[10px] font-black text-indigo-600 uppercase tracking-wider">
+                              {creatorRole}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6 text-slate-600">{t.phone || "-"}</td>
+                        <td className="py-4 px-6">
+                          <span className={`px-2.5 py-1 rounded-lg text-xs font-extrabold border uppercase tracking-wider ${
+                            t.unit ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-amber-50 text-amber-700 border-amber-200"
+                          }`}>
                             {t.unit ? "Assigned" : "Unassigned"}
                           </span>
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 text-[10px] font-bold rounded-full w-fit uppercase ${
-                              t.status === "active"
-                                ? "bg-blue-100 text-blue-800"
-                                : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {t.status || "Active"}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                        {(role === "ADMIN" || role === "LANDLORD") && (
-                          <div className="flex justify-end space-x-2">
-                            <button
-                              onClick={() => handleEdit(t)}
-                              className="p-2 text-gray-400 hover:text-blue-600 transition"
-                              title="Edit"
-                            >
-                              <PencilIcon className="h-5 w-5" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(t.id)}
-                              className="p-2 text-gray-400 hover:text-red-600 transition"
-                              title="Delete"
-                            >
-                              <TrashIcon className="h-5 w-5" />
-                            </button>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="py-4 px-6 text-right">
+                          {(role === "ADMIN" || role === "LANDLORD") && (
+                            <div className="flex justify-end space-x-2">
+                              <button
+                                onClick={() => handleEdit(t)}
+                                className="p-1.5 text-slate-400 hover:text-indigo-600 transition rounded-lg hover:bg-slate-100"
+                                title="Edit"
+                              >
+                                <PencilIcon className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(t.id)}
+                                className="p-1.5 text-slate-400 hover:text-rose-600 transition rounded-lg hover:bg-slate-100"
+                                title="Delete"
+                              >
+                                <TrashIcon className="h-4 w-4" />
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

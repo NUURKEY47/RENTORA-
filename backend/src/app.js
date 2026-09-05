@@ -7,6 +7,7 @@ import unitRoute from "./modules/unit/unit.routes.js"
 import landlordUnit from "./modules/landlord/landlord.routes.js"
 import tenantRoute from "./modules/tenant/tenant.routes.js"
 import adminRoute from "./modules/admin/admin.routes.js";
+import invoiceRoute from "./modules/invoice/invoice.routes.js";
 import globalErrorHandler from "./middlewares/errorHandler.js";
 
 
@@ -28,6 +29,7 @@ app.use("/api/v1/units", unitRoute)
 app.use("/api/v1/landlords", landlordUnit)
 app.use("/api/v1/tenants", tenantRoute)
 app.use("/api/v1/admin", adminRoute)
+app.use("/api/v1/invoices", invoiceRoute)
 
 
 

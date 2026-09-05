@@ -1,9 +1,6 @@
-// src/modules/unit/unit.service.js
-
 import { unitRepository } from "./unit.repository.js";
 import AppError from "../../utils/AppError.js";
-
-
+import prisma from "../../config/db.js";
 
 export const unitService = {
   createUnit: async (data, user) => {
@@ -81,7 +78,34 @@ export const unitService = {
       }
     }
 
-    // Optional: prevent changing to occupied without tenant (future)
+    // ADVANCED BACKEND CONCEPT: Automatic Tenant Detachment on Unit Vacate (Interactive Transaction)
+    if (data.status === "available") {
+      return await prisma.$transaction(async (tx) => {
+        // 1. Detach all tenants from this unit (set unitId = null)
+        await tx.user.updateMany({
+          where: { unitId: id },
+          data: { unitId: null }
+        });
+
+        // 2. Update unit status and disconnect tenant relations
+        return await tx.unit.update({
+          where: { id },
+          data: { ...data, tenants: { set: [] } },
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            status: true,
+            unitType: true,
+            listingType: true,
+            size: true,
+            description: true,
+            propertyId: true,
+          }
+        });
+      });
+    }
+
     return await unitRepository.updateUnit(id, data);
   },
 

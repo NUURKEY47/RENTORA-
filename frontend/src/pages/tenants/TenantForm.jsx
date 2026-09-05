@@ -208,11 +208,15 @@ export default function TenantForm({ tenant, onClose, onSuccess }) {
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition outline-none font-medium text-slate-900 text-sm"
               >
                 <option value="">-- Unassigned --</option>
-                {filteredUnits.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.name} ({u.property?.name || "Property"}) - KES {u.price?.toLocaleString()}
-                  </option>
-                ))}
+                {filteredUnits.map((u) => {
+                  const isCurrentUnit = String(u.id) === String(formData.unitId);
+                  const isAvailable = u.status === "available" || isCurrentUnit;
+                  return (
+                    <option key={u.id} value={u.id} disabled={!isAvailable}>
+                      {isAvailable ? "🟢 " : "🔴 "} {u.name} ({u.property?.name || "Property"}) - KES {u.price?.toLocaleString()} {!isAvailable ? "(Occupied)" : ""}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>

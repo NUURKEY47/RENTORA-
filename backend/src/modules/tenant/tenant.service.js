@@ -50,7 +50,8 @@ export const tenantService = {
                 throw new AppError("You do not own this unit", 403);
             }
 
-            // Auto-assign tenant to this unit
+            // Track creator and auto-assign unit
+            data.managedById = user.id;
             data.unitId = data.unitId;
         } else {
             throw new AppError("Only admins and landlords can create tenants", 403);
@@ -101,7 +102,10 @@ export const tenantService = {
     listTenants: async (user) => {
         const where = { role: "TENANT" };
         if (user.role === "LANDLORD") {
-            where.unit = { property: { landlordId: user.id } };
+            where.OR = [
+                { unit: { property: { landlordId: user.id } } },
+                { managedById: user.id }
+            ];
         } else if (user.role === "ADMIN" && user.managedById) {
             where.OR = [
                 { managedById: user.id },
@@ -119,8 +123,12 @@ export const tenantService = {
             throw new AppError("Tenant not found", 404);
         }
 
-        if (user.role === "LANDLORD" && (!tenant.unit || tenant.unit.property.landlordId !== user.id)) {
-            throw new AppError("You do not own this tenant's unit", 403);
+        if (user.role === "LANDLORD") {
+            const isOwner = tenant.unit?.property?.landlordId === user.id;
+            const isCreator = tenant.managedById === user.id;
+            if (!isOwner && !isCreator) {
+                throw new AppError("You do not manage this tenant", 403);
+            }
         } else if (user.role === "ADMIN" && user.managedById && tenant.managedById !== user.id) {
             throw new AppError("You do not manage this tenant", 403);
         }
@@ -145,9 +153,13 @@ export const tenantService = {
             throw new AppError("Tenant not found", 404);
         }
 
-        // RBAC check
-        if (user.role === "LANDLORD" && (!existing.unit || existing.unit.property.landlordId !== user.id)) {
-            throw new AppError("You do not own this tenant's unit", 403);
+        // Strict Landlord RBAC Check
+        if (user.role === "LANDLORD") {
+            const isOwner = existing.unit?.property?.landlordId === user.id;
+            const isCreator = existing.managedById === user.id;
+            if (!isOwner && !isCreator) {
+                throw new AppError("You do not manage this tenant", 403);
+            }
         } else if (user.role === "ADMIN" && user.managedById && existing.managedById !== user.id) {
             throw new AppError("You do not manage this tenant", 403);
         }
